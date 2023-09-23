@@ -1,0 +1,7 @@
+- write manual
+- launch in github
+- introduce vr bank statement provider
+- automated recognize skasse and vr bank statement
+- read all bank skasse and vr bank statements within a specific directory
+- introduce global type safety
+

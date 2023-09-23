@@ -1,0 +1,11 @@
+import unittest
+from utest.TransactionProvider.SKassen.SKassenTransactionExtractor_Test import ASKassenTransactionExtractor
+from utest.TransactionProvider.SKassen.SKassenTransactionConverter_Test import ASKassenTransactionConverter
+from utest.Sort.TransactionSorter_Test import ATransactionSorter
+from utest.TransactionProvider.SKassen.SKassenTransactionProvider_Test import ASKassenTransactionProvider
+from utest.Sort.CsvSortRuleProvider_Test import ACsvSortRuleProvider
+from utest.File.FileReader_Test import AFileReader
+from utest.TransactionMonitor_Test import ATransactionMonitor
+from utest.Presenter.CsvPresenter_Test import ACsvPresenter
+if __name__ == '__main__':
+    unittest.main()

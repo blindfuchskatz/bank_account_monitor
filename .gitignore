@@ -1,0 +1,6 @@
+.vscode/
+.coverage
+utest/coverage_report/*
+e2etest/results/*
+analyze/*
+**/__pycache__/
