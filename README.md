@@ -7,11 +7,13 @@ The maturity level or release notes are visible via the release Git tags.
 ## *Example Usage*
 
 The easiest, but not resource-saving way to use the Bank Account Monitor is via the *bank_account_monitor_sdk*.
-All dependencies are included in the *bank_account_monitor_sdk*. See also: [docker](./docker/) (Dockerfile for the SDK).
+All dependencies are included in the *bank_account_monitor_sdk*. See also into the [Dockerfile](./docker/Dockerfile).
 If you don't want the overhead caused by the SDK, feel free to create your own Python environment.
 All commands below have been tested only in an Ubuntu 22.04 environment with Rootless Docker installed
 
 ### *Building bank_account_monitor_sdk*
+
+Enter the project root directory and execute the following command. This will build the SDK.
 
         ./run_build_sdk.sh
 
@@ -44,7 +46,7 @@ Example:
 
 It is possible to create up to 100 sorting rules, each with a maximum of 100 search patterns.
 Any other lines that do not conform to the syntax described above are invalid and will cause the Bank Account Monitor to abort execution. This also applies to search patterns that correspond to at least two categories.
-Transactions that cannot be assigned to a category are sorted into the *misc* category
+Transactions that cannot be assigned to a category are sorted into the *misc* category.
 If no sorting rule matches a transaction description, all transactions are assigned to the *misc* category.
 This also happens if you pass an empty file to the Bank Account Monitor as a sorting rule file.
 
@@ -64,7 +66,7 @@ The Syntax is as follows:
 
 The overall project is developed in a test-driven approach. If you want to extend the project with your own written transaction provider for a specific bank, you can use the unit and end-to-end tests of this project.
 
-You can run the unit tests with the following command dependencies:
+You can run the unit tests with the following command:
 
         ./run_utest.sh
 
@@ -74,8 +76,8 @@ You can run the end to end tests with the following command:
 
 ## *Dependencies*
 
-All dependencies of the project are listed in the Docker file. See also [Dockerfile](./docker/Dockerfile).
+All dependencies of the project are listed in the Docker file. See also into the [Dockerfile](./docker/Dockerfile).
 
 ## *License*
 
-The Bank Account Monitor is publish under the [License](./LICENSE). When you use the Bank Account Monitor in the way descried in the example above, you also shall consider the licenses of the [dependencies](#dependencies)
+The Bank Account Monitor is publish under this [License](./LICENSE). When you use the Bank Account Monitor in the way descried in the example above, you also shall consider the licenses of the [dependencies](#dependencies)
