@@ -8,10 +8,17 @@ Test Teardown       delete test files
 
 
 *** Test Cases ***
-Sort skasse bank statement by sort rule into csv file
+Sort skasse account statement by sort rule into csv file
     Given A skasse bank statement with three transactions
     And Two sort rules
     When Bank account monitor is called    ${SKASSE_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
+    Then A Csv file with sorted transactions where created
+
+Sort VR bank account statement by sort rule into csv file
+    [Tags]    tdd_red_phase
+    Given A VR bank account statement with three transactions
+    And Two sort rules
+    When Bank account monitor is called    ${VR_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
     Then A Csv file with sorted transactions where created
 
 Sort all transaction to misc when sort rule file is empty
@@ -52,7 +59,10 @@ Exception for passing only directory of output file is logged
 
 *** Keywords ***
 A skasse bank statement with three transactions
-    PdfCreator.Write    ${SKASSE_BANK_STATEMENT_FILE}    ${EXAMPLE_BANK_STATEMENT}
+    PdfCreator.Write    ${SKASSE_BANK_STATEMENT_FILE}    ${EXAMPLE_SKASSE_ACCOUNT_STATEMENT}
+
+A VR bank account statement with three transactions
+    Create File    ${VR_BANK_STATEMENT_FILE}    ${EXAMPLE_VR_BANK_ACCOUNT_STATEMENT}
 
 Some PDF file without transactions
     PdfCreator.Write    ${SKASSE_BANK_STATEMENT_FILE}    "Hello my name is Emil"
