@@ -1,6 +1,7 @@
 import unittest
 from utest.TransactionProvider.SKassen.SKassenTransactionExtractor_Test import ASKassenTransactionExtractor
 from utest.TransactionProvider.SKassen.SKassenTransactionConverter_Test import ASKassenTransactionConverter
+from utest.TransactionProvider.VrBank.VrBankTransactionConverter_Test import AVrBankTransactionConverter
 from utest.Sort.TransactionSorter_Test import ATransactionSorter
 from utest.TransactionProvider.SKassen.SKassenTransactionProvider_Test import ASKassenTransactionProvider
 from utest.Sort.CsvSortRuleProvider_Test import ACsvSortRuleProvider
