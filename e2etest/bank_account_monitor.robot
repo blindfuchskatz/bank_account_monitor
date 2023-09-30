@@ -27,7 +27,7 @@ Sort all transaction to misc when sort rule file is empty
     When Bank account monitor is called    ${SKASSE_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
     Then All Transactions are sorted to misc category
 
-Creaty empyt misc output when no transaction available
+Creaty empty misc output when no transaction available
     Given Some PDF file without transactions
     And No Sort rule
     When Bank account monitor is called    ${SKASSE_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
