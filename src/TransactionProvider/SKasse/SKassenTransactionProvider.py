@@ -6,14 +6,15 @@ from src.TransactionProvider.TransactionProvider import TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 
 INVALID_INPUT_PATH = "SKassen transaction provider error|invalid input path|path:<{}>"
+PROVIDER_EXCEPTION = "SKassen transaction provider error|what:<{}>"
 
 
 class SKassenTransactionProvider(TransactionProvider):
     def __init__(self, file_checker, path):
-        self.file_checker = file_checker
+        self.__file_checker = file_checker
         self.__path = path
 
-        if not self.file_checker.file_exists(self.__path):
+        if not self.__file_checker.file_exists(self.__path):
             raise TransactionProviderException(
                 INVALID_INPUT_PATH.format(self.__path))
 
@@ -34,4 +35,4 @@ class SKassenTransactionProvider(TransactionProvider):
             return t_list
         except Exception as e:
             raise TransactionProviderException(
-                "Transaction provider error|what:<{}>".format(str(e)))
+                PROVIDER_EXCEPTION.format(str(e)))

@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from src.File.FileChecker import FileChecker
 from src.File.PdfPageReader import PdfPageReader
 from src.File.PdfReaderException import PdfReaderException
-from src.TransactionProvider.SKasse.SKassenTransactionProvider import INVALID_INPUT_PATH, SKassenTransactionProvider
+from src.TransactionProvider.SKasse.SKassenTransactionProvider import INVALID_INPUT_PATH, PROVIDER_EXCEPTION, SKassenTransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 from utest.TestHelper import CustomAssert
 from src.TransactionProvider.TransactionConverterException import TransactionConverterException
@@ -22,6 +22,7 @@ ta = Transaction("21.08.2023", "Gutschrift", "a", 10000009)
 tb = Transaction("22.08.2023", "Entgeltabrechnung", "b", -690)
 
 SOME_PATH = "/path/to/sort_rules"
+SOME_ERROR = "some error"
 
 
 class ASKassenTransactionProvider(unittest.TestCase):
@@ -66,20 +67,20 @@ class ASKassenTransactionProvider(unittest.TestCase):
     def testForwardPdfReaderException(self):
         self.file_checker.file_exists = MagicMock(return_value=True)
         PdfPageReader.read_file_content = MagicMock(
-            side_effect=PdfReaderException("some error"))
+            side_effect=PdfReaderException(SOME_ERROR))
 
         p = SKassenTransactionProvider(self.file_checker, SOME_PATH)
         self.ca.assertRaisesWithMessage(
-            "Transaction provider error|what:<some error>", p.get_transactions)
+            PROVIDER_EXCEPTION.format(SOME_ERROR), p.get_transactions)
 
     def testForwardTransactionConverterException(self):
         self.file_checker.file_exists = MagicMock(return_value=True)
         PdfPageReader.read_file_content = MagicMock(
-            side_effect=TransactionConverterException("some error"))
+            side_effect=TransactionConverterException(SOME_ERROR))
 
         p = SKassenTransactionProvider(self.file_checker, SOME_PATH)
         self.ca.assertRaisesWithMessage(
-            "Transaction provider error|what:<some error>", p.get_transactions)
+            PROVIDER_EXCEPTION.format(SOME_ERROR), p.get_transactions)
 
     def testRaiseExceptionWhenInputPathIsInvalid(self):
         self.file_checker.file_exists = MagicMock(return_value=False)
