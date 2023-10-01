@@ -7,7 +7,7 @@ from src.File.FileReaderException import FileReaderException
 from src.TransactionProvider.Transaction import Transaction
 from src.TransactionProvider.TransactionProvider import TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
-from src.TransactionProvider.VrBank.VrBankTransactionConverter import FORMAT_ERROR_TO_FEW_LINES, VrBankTransactionConverter
+from src.TransactionProvider.VrBank.VrBankTransactionConverter import FORMAT_ERROR_TO_FEW_LINES, NUMBER_CSV_ENTRIES, VrBankTransactionConverter
 
 from utest.TestHelper import CustomAssert
 
@@ -92,7 +92,8 @@ class AVrBankTransactionProvider(unittest.TestCase):
         line1 = "servus"
         FileReader.get_lines = MagicMock(return_value=[csv_head_line, line1])
 
-        e = PROVIDER_EXCEPTION.format(FORMAT_ERROR_TO_FEW_LINES.format(19, 1))
+        e = PROVIDER_EXCEPTION.format(
+            FORMAT_ERROR_TO_FEW_LINES.format(NUMBER_CSV_ENTRIES, 1))
         self.ca.assertRaisesWithMessage(e, self.p.get_transactions)
 
     def testRaiseExceptionWhenInputPathIsInvalid(self):
