@@ -4,9 +4,10 @@ from src.File.FileChecker import FileChecker
 from src.File.FileReader import FileReader
 from src.File.FileReaderException import FileReaderException
 from src.TransactionProvider.Transaction import Transaction
+from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 from src.TransactionProvider.VrBank.VrBankTransactionConverter import FORMAT_ERROR_TO_FEW_LINES, NUMBER_CSV_ENTRIES
-from src.TransactionProvider.VrBank.VrBankTransactionProvider import INVALID_INPUT_PATH, PROVIDER_EXCEPTION, VrBankTransactionProvider
+from src.TransactionProvider.VrBank.VrBankTransactionProvider import PROVIDER_EXCEPTION, VrBankTransactionProvider
 
 from utest.TestHelper import CustomAssert
 
@@ -71,4 +72,4 @@ class AVrBankTransactionProvider(unittest.TestCase):
         self.file_checker.file_exists = MagicMock(return_value=False)
 
         self.ca.assertRaisesWithMessage(
-            INVALID_INPUT_PATH.format(SOME_PATH), VrBankTransactionProvider, self.file_checker, SOME_PATH)
+            INVALID_INPUT_PATH.format("VR bank", SOME_PATH), VrBankTransactionProvider, self.file_checker, SOME_PATH)

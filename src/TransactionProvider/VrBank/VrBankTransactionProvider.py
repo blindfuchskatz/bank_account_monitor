@@ -8,22 +8,15 @@ from src.TransactionProvider.VrBank.VrBankTransactionConverter import VrBankTran
 
 
 PROVIDER_EXCEPTION = "VR bank transaction provider error|what:<{}>"
-INVALID_INPUT_PATH = "VR bank transaction provider error|invalid input path|path:<{}>"
 
 
 class VrBankTransactionProvider(TransactionProvider):
     def __init__(self, file_checker: FileChecker, path: str) -> None:
-        super().__init__()
-        self.__path = path
-        self.__file_checker = file_checker
-
-        if not self.__file_checker.file_exists(self.__path):
-            raise TransactionProviderException(
-                INVALID_INPUT_PATH.format(self.__path))
+        super().__init__(file_checker, path, "VR bank")
 
     def get_transactions(self) -> List[Transaction]:
         try:
-            csv_line_list = FileReader.get_lines(self.__path)
+            csv_line_list = FileReader.get_lines(self._path)
             t_list = []
             c = VrBankTransactionConverter()
 

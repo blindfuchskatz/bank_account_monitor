@@ -5,18 +5,12 @@ from src.TransactionProvider.SKasse.SKassenTransactionExtractor import SKassenTr
 from src.TransactionProvider.TransactionProvider import TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 
-INVALID_INPUT_PATH = "SKassen transaction provider error|invalid input path|path:<{}>"
 PROVIDER_EXCEPTION = "SKassen transaction provider error|what:<{}>"
 
 
 class SKassenTransactionProvider(TransactionProvider):
     def __init__(self, file_checker, path):
-        self.__file_checker = file_checker
-        self.__path = path
-
-        if not self.__file_checker.file_exists(self.__path):
-            raise TransactionProviderException(
-                INVALID_INPUT_PATH.format(self.__path))
+        super().__init__(file_checker, path, "SKassen")
 
     def get_transactions(self):
         try:
@@ -24,7 +18,7 @@ class SKassenTransactionProvider(TransactionProvider):
             e = SKassenTransactionExtractor()
             c = SKassenTransactionConverter()
 
-            text = r.read_file_content(self.__path)
+            text = r.read_file_content(self._path)
             t_list = []
 
             raw_trans_list = e.extract(text)
