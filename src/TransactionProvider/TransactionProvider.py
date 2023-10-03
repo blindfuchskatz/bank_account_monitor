@@ -1,5 +1,6 @@
 
 from abc import abstractmethod
+from src.File.FileChecker import FileChecker
 
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 
@@ -7,7 +8,7 @@ INVALID_INPUT_PATH = "{} transaction provider error|invalid input path|path:<{}>
 
 
 class TransactionProvider:
-    def __init__(self, file_checker, path, name) -> None:
+    def __init__(self, file_checker: FileChecker, path: str, name: str) -> None:
         self._file_checker = file_checker
         self._path = path
         self._name = name

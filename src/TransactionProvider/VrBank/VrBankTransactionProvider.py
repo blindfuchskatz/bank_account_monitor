@@ -8,11 +8,16 @@ from src.TransactionProvider.VrBank.VrBankTransactionConverter import VrBankTran
 
 
 PROVIDER_EXCEPTION = "VR bank transaction provider error|what:<{}>"
+HEAD_LINE = """Bezeichnung Auftragskonto;IBAN Auftragskonto;BIC Auftragskonto;Bankname Auftragskonto;Buchungstag;Valutadatum;Name Zahlungsbeteiligter;IBAN Zahlungsbeteiligter;BIC (SWIFT-Code) Zahlungsbeteiligter;Buchungstext;Verwendungszweck;Betrag;Waehrung;Saldo nach Buchung;Bemerkung;Kategorie;Steuerrelevant;Glaeubiger ID;Mandatsreferenz"""
+IS_NOT_ACCOUNT_STATEMENT = "no vr bank account statement"
 
 
 class VrBankTransactionProvider(TransactionProvider):
     def __init__(self, file_checker: FileChecker, path: str) -> None:
         super().__init__(file_checker, path, "VR bank")
+        if not self.is_account_statement():
+            raise TransactionProviderException(PROVIDER_EXCEPTION.format(
+                IS_NOT_ACCOUNT_STATEMENT))
 
     def get_transactions(self) -> List[Transaction]:
         try:
@@ -24,6 +29,19 @@ class VrBankTransactionProvider(TransactionProvider):
                 t_list.append(c.convert(csv_line))
 
             return t_list
+        except Exception as e:
+            raise TransactionProviderException(
+                PROVIDER_EXCEPTION.format(str(e)))
+
+    def is_account_statement(self) -> bool:
+        try:
+            csv_line_list = FileReader.get_lines(self._path)
+            if not csv_line_list:
+                return False
+
+            if csv_line_list[0] == HEAD_LINE:
+                return True
+            return False
         except Exception as e:
             raise TransactionProviderException(
                 PROVIDER_EXCEPTION.format(str(e)))

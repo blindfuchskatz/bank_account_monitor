@@ -9,3 +9,10 @@ class PdfPageReader:
             text += page.extract_text() + "\n"
 
         return text
+
+    def is_pdf(self, path):
+        try:
+            PdfReader(path)
+            return True
+        except Exception:
+            return False
