@@ -4,6 +4,7 @@ Library             Process
 Library             PdfCreator.py
 Variables           Varfile.py
 
+Test Setup          Create Directory    ${ANALYZE_DIR}
 Test Teardown       delete test files
 
 
@@ -12,13 +13,21 @@ Sort skasse account statement by sort rule into csv file
     Given A skasse bank statement with three transactions
     And Two sort rules
     When Bank account monitor is called    ${SKASSE_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
-    Then A Csv file with sorted transactions where created
+    Then A Csv file with sorted transactions where created    ${SORTED_SKASSEN_TRANS}
 
 Sort VR bank account statement by sort rule into csv file
     Given A VR bank account statement with three transactions
     And Two sort rules
     When Bank account monitor is called    ${VR_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
-    Then A Csv file with sorted transactions where created
+    Then A Csv file with sorted transactions where created    ${SORTED_VRBANK_TRANS}
+
+Sort all skassen and vr bank transactions within a directory
+    [Tags]    tdd_red_phase
+    Given A skasse bank statement with three transactions
+    And A VR bank account statement with three transactions
+    And Two sort rules
+    When Bank account monitor is called    ${ANALYZE_DIR}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
+    Then A Csv file with sorted transactions where created    ${SORTED_SKASSEN_VRBANK_TRANS}
 
 Sort all transaction to misc when sort rule file is empty
     Given A skasse bank statement with three transactions
@@ -105,7 +114,8 @@ Bank account monitor is called without bank statement
     ...    stderr=${STDERR_FILE}
 
 A Csv file with sorted transactions where created
-    Expect file have content    ${CSV_OUTPUT_FILE}    ${SORTED_TRANSACTION_CSV}
+    [Arguments]    ${sorted_transactions_csv}
+    Expect file have content    ${CSV_OUTPUT_FILE}    ${sorted_transactions_csv}
     Expect file have content    ${STDOUT_FILE}    ${EMPTY}
     Expect file have content    ${STDERR_FILE}    ${EMPTY}
 

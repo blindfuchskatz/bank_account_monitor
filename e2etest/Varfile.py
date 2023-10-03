@@ -1,7 +1,8 @@
-SKASSE_BANK_STATEMENT_FILE = "/tmp/skasse_statement_file.pdf"
-VR_BANK_STATEMENT_FILE = "/tmp/vr_bank_statement_file.csv"
-SORT_RULE_FILE = "/tmp/sort_rule.csv"
-CSV_OUTPUT_FILE = "/tmp/sorted_transactions.csv"
+ANALYZE_DIR = "/tmp/analyze/"
+SKASSE_BANK_STATEMENT_FILE = ANALYZE_DIR + "skasse_statement_file.pdf"
+VR_BANK_STATEMENT_FILE = ANALYZE_DIR + "vr_bank_statement_file.csv"
+SORT_RULE_FILE = ANALYZE_DIR + "sort_rule.csv"
+CSV_OUTPUT_FILE = ANALYZE_DIR + "sorted_transactions.csv"
 STDOUT_FILE = "/tmp/stdout.txt"
 STDERR_FILE = "/tmp/stderr.txt"
 EXAMPLE_SKASSE_ACCOUNT_STATEMENT = """Sirupkasse
@@ -13,13 +14,25 @@ Allianz\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0-890,83
 Food\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0-5,83
 Some text"""
 EXAMPLE_VR_BANK_ACCOUNT_STATEMENT = """Bezeichnung Auftragskonto;IBAN Auftragskonto;BIC Auftragskonto;Bankname Auftragskonto;Buchungstag;Valutadatum;Name Zahlungsbeteiligter;IBAN Zahlungsbeteiligter;BIC (SWIFT-Code) Zahlungsbeteiligter;Buchungstext;Verwendungszweck;Betrag;Waehrung;Saldo nach Buchung;Bemerkung;Kategorie;Steuerrelevant;Glaeubiger ID;Mandatsreferenz
-Mein GiroDirekt;DE1234567890;ABCDEF;VR BANK;31.08.2023;31.08.2023;Leasing Auto;DE987654321;ABCDEFGHIJ;Debit;Leasing;-310,90;EUR;1.234.567,89;;Drogeriemarkt;;DE1234556789098723;OFFLINE
-Mein GiroDirekt;DE1234996790;ABCDEFGHI;VR BANK;31.08.2023;31.08.2023;Versicherung;DE987654321;ASDFGHJKLZ;Debit;Allianz;-890,83;EUR;1.234.467,89;;Grusch;;DE13456785263000123;OFFLINE
-Mein GiroDirekt;DE1234996712;ABZDEFGHI;VR BANK;31.08.2023;31.08.2023;Food store;DE787654321;ASDFGHJKLY;Debit;Food;-5,83;EUR;1.234.267,89;;Auto;;DE51234567485876890000123;OFFLINE
+Mein GiroDirekt;DE1234567890;ABCDEF;VR BANK;01.09.2023;31.08.2023;Leasing Auto;DE987654321;ABCDEFGHIJ;Debit;Leasing;-310,90;EUR;1.234.567,89;;Drogeriemarkt;;DE1234556789098723;OFFLINE
+Mein GiroDirekt;DE1234996790;ABCDEFGHI;VR BANK;01.09.2023;31.08.2023;Versicherung;DE987654321;ASDFGHJKLZ;Debit;Allianz;-890,83;EUR;1.234.467,89;;Grusch;;DE13456785263000123;OFFLINE
+Mein GiroDirekt;DE1234996712;ABZDEFGHI;VR BANK;01.09.2023;31.08.2023;Food store;DE787654321;ASDFGHJKLY;Debit;Food;-5,83;EUR;1.234.267,89;;Auto;;DE51234567485876890000123;OFFLINE
 """
-SORTED_TRANSACTION_CSV = """misc;31.08.2023;Debit;"Food";-5.83
+SORTED_SKASSEN_TRANS = """misc;31.08.2023;Debit;"Food";-5.83
 Car;31.08.2023;Debit;"Leasing";-310.90
 Insurance;31.08.2023;Debit;"Allianz";-890.83"""
+
+SORTED_VRBANK_TRANS = """misc;01.09.2023;Debit;"Food";-5.83
+Car;01.09.2023;Debit;"Leasing";-310.90
+Insurance;01.09.2023;Debit;"Allianz";-890.83"""
+
+SORTED_SKASSEN_VRBANK_TRANS = """misc;31.08.2023;Debit;"Food";-5.83
+Car;31.08.2023;Debit;"Leasing";-310.90
+Insurance;31.08.2023;Debit;"Allianz";-890.83
+misc;01.09.2023;Debit;"Food";-5.83
+Car;01.09.2023;Debit;"Leasing";-310.90
+Insurance;01.09.2023;Debit;"Allianz";-890.83"""
+
 ALL_MISC_TRANSACTION_CSV = """misc;31.08.2023;Debit;"Leasing";-310.90
 misc;31.08.2023;Debit;"Allianz";-890.83
 misc;31.08.2023;Debit;"Food";-5.83"""
