@@ -106,6 +106,8 @@ Bank account monitor is called without bank statement
 
 A Csv file with sorted transactions where created
     Expect file have content    ${CSV_OUTPUT_FILE}    ${SORTED_TRANSACTION_CSV}
+    Expect file have content    ${STDOUT_FILE}    ${EMPTY}
+    Expect file have content    ${STDERR_FILE}    ${EMPTY}
 
 All Transactions are sorted to misc category
     Expect file have content    ${CSV_OUTPUT_FILE}    ${ALL_MISC_TRANSACTION_CSV}

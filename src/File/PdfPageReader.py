@@ -12,7 +12,8 @@ class PdfPageReader:
 
     def is_pdf(self, path):
         try:
-            PdfReader(path)
-            return True
+            with open(path, 'rb') as file:
+                header = file.read(4)
+                return header == b'%PDF'
         except Exception:
             return False
