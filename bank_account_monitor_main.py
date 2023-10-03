@@ -8,7 +8,6 @@ from src.Logger import Logger
 from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
 from src.TransactionMonitor import TransactionMonitor
 from src.Sort.TransactionSorter import TransactionSorter
-from src.TransactionProvider.SKasse.SKassenTransactionProvider import SKassenTransactionProvider
 from src.TransactionProvider.TransactionProviderFactory import TransactionProviderFactory
 from version import __version__
 
