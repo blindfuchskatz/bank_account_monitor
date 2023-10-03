@@ -65,7 +65,7 @@ A VR bank account statement with three transactions
     Create File    ${VR_BANK_STATEMENT_FILE}    ${EXAMPLE_VR_BANK_ACCOUNT_STATEMENT}
 
 Some PDF file without transactions
-    PdfCreator.Write    ${SKASSE_BANK_STATEMENT_FILE}    "Hello my name is Emil"
+    PdfCreator.Write    ${SKASSE_BANK_STATEMENT_FILE}    "Skassen Hello my name is Emil"
 
 Two sort rules
     Create File    ${SORT_RULE_FILE}    Car;Leasing\nInsurance;Allianz
