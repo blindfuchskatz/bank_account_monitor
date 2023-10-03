@@ -15,7 +15,6 @@ Sort skasse account statement by sort rule into csv file
     Then A Csv file with sorted transactions where created
 
 Sort VR bank account statement by sort rule into csv file
-    [Tags]    tdd_red_phase
     Given A VR bank account statement with three transactions
     And Two sort rules
     When Bank account monitor is called    ${VR_BANK_STATEMENT_FILE}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}

@@ -9,6 +9,7 @@ from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
 from src.TransactionMonitor import TransactionMonitor
 from src.Sort.TransactionSorter import TransactionSorter
 from src.TransactionProvider.SKasse.SKassenTransactionProvider import SKassenTransactionProvider
+from src.TransactionProvider.TransactionProviderFactory import TransactionProviderFactory
 from version import __version__
 
 
@@ -30,8 +31,8 @@ if __name__ == '__main__':
 
         file_writer = FileWriter()
         file_checker = FileChecker()
-        trans_provider = SKassenTransactionProvider(
-            file_checker, arguments.transaction_path)
+        f = TransactionProviderFactory()
+        trans_provider = f.get_transaction_provider(arguments.transaction_path)
         sort_rule_provider = CsvSortRuleProvider(
             file_checker, arguments.sort_rule_path)
         sorter = TransactionSorter()

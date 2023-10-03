@@ -43,7 +43,7 @@ MISSING_BANK_STATEMENT = """usage: bank_account_monitor_main.py [-h] -t TRANSACT
 bank_account_monitor_main.py: error: the following arguments are required: -t/--transaction_path
 """
 
-EXCEPTION_INVALID_BANK_STATEMENT = """SKassen transaction provider error|invalid input path|path:</some/path.txt>
+EXCEPTION_INVALID_BANK_STATEMENT = """Account statement file does not exist:</some/path.txt>
 """
 EXCEPTION_INVALID_SORT_RULE = """Cve sort rule error|invalid input path|path:</some/path.txt>
 """
