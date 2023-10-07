@@ -2,7 +2,8 @@ from pypdf import PdfReader
 
 
 class PdfPageReader:
-    def read_file_content(self, path):
+    @staticmethod
+    def read_file_content(path):
         reader = PdfReader(path)
         text = ""
         for page in reader.pages:
@@ -10,7 +11,8 @@ class PdfPageReader:
 
         return text
 
-    def is_pdf(self, path):
+    @staticmethod
+    def is_pdf(path):
         try:
             with open(path, 'rb') as file:
                 header = file.read(4)
