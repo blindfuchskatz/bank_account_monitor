@@ -7,8 +7,7 @@ from src.TransactionProvider.TransactionProviderFactoryException import Transact
 
 
 class MultiTransactionProvider(TransactionProvider):
-    def __init__(self, file_checker: FileChecker, path: str, tp_factory: Factory) -> None:
-        self.file_checker = file_checker
+    def __init__(self, path: str, tp_factory: Factory) -> None:
         self.dir = path
         self.tp_factory = tp_factory
 

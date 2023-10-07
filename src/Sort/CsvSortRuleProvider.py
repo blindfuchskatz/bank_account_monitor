@@ -17,11 +17,10 @@ INVALID_INPUT_PATH = "Cve sort rule error|invalid input path|path:<{}>"
 
 
 class CsvSortRuleProvider(SortRuleProvider):
-    def __init__(self, file_checker, path) -> None:
-        self.__file_checker = file_checker
+    def __init__(self, path) -> None:
         self.__path = path
 
-        if not self.__file_checker.file_exists(self.__path):
+        if not FileChecker.file_exists(self.__path):
             raise SortRuleProviderException(
                 INVALID_INPUT_PATH.format(self.__path))
 

@@ -29,14 +29,11 @@ if __name__ == '__main__':
         arguments = parser.parse_args()
 
         file_writer = FileWriter()
-        file_checker = FileChecker()
         f = TransactionProviderFactory()
         trans_provider = f.get_transaction_provider(arguments.transaction_path)
-        sort_rule_provider = CsvSortRuleProvider(
-            file_checker, arguments.sort_rule_path)
+        sort_rule_provider = CsvSortRuleProvider(arguments.sort_rule_path)
         sorter = TransactionSorter()
-        csv_presenter = CsvPresenter(
-            file_checker, file_writer, arguments.csv_output_file)
+        csv_presenter = CsvPresenter(file_writer, arguments.csv_output_file)
 
         monitor = TransactionMonitor(
             trans_provider, sort_rule_provider, sorter, csv_presenter, logger)

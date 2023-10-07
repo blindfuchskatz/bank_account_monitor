@@ -14,22 +14,21 @@ FILE_NOT_EXIST = "Account statement file does not exist:<{}>"
 
 class TransactionProviderFactory(Factory):
     def get_transaction_provider(self, path: str) -> TransactionProvider:
-        file_checker = FileChecker()
 
         if (DirReader.is_dir(path)):
-            return MultiTransactionProvider(file_checker, path, self)
+            return MultiTransactionProvider(path, self)
 
-        if not file_checker.file_exists(path):
+        if not FileChecker.file_exists(path):
             raise TransactionProviderFactoryException(
                 FILE_NOT_EXIST.format(path))
 
         try:
-            return SKassenTransactionProvider(file_checker, path)
+            return SKassenTransactionProvider(path)
         except TransactionProviderException:
             pass
 
         try:
-            return VrBankTransactionProvider(file_checker, path)
+            return VrBankTransactionProvider(path)
         except TransactionProviderException:
             pass
 

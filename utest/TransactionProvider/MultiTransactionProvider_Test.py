@@ -33,10 +33,7 @@ class AMultiTransactionProvider(unittest.TestCase):
         self.is_dir = DirReader.is_dir
         DirReader.is_dir = MagicMock(side_effect=[True, False])
 
-        self.file_checker = FileChecker()
-
-        self.p = MultiTransactionProvider(
-            self.file_checker, SOME_DIR, self.tpf)
+        self.p = MultiTransactionProvider(SOME_DIR, self.tpf)
 
         self.ca = CustomAssert()
         self.ca.setExceptionType(TransactionProviderException)

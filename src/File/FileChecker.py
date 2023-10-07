@@ -2,10 +2,12 @@ import os
 
 
 class FileChecker:
-    def file_exists(self, file: str) -> bool:
+    @staticmethod
+    def file_exists(file: str) -> bool:
         return os.path.exists(file) and os.path.isfile(file)
 
-    def dir_of_file_exists(self, file: str) -> bool:
+    @staticmethod
+    def dir_of_file_exists(file: str) -> bool:
         directory = os.path.dirname(file)
         file = os.path.basename(file)
 

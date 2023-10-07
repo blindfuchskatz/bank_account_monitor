@@ -19,16 +19,17 @@ class ACsvSortRuleProvider(unittest.TestCase):
 
     def setUp(self) -> None:
         self.get_lines = FileReader.get_lines
-        self.file_checker = FileChecker()
+        self.file_exist = FileChecker.file_exists
         self.ca = CustomAssert()
         self.ca.setExceptionType(SortRuleProviderException)
 
     def tearDown(self):
         FileReader.get_lines = self.get_lines
+        FileChecker.file_exists = self.file_exist
 
     def testReturnEmptySortRuleList(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         FileReader.get_lines = MagicMock(return_value=[])
 
@@ -37,8 +38,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.assertListEqual(r_list, [])
 
     def testReturnOneSortRule(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line = "Insurance;HUK;\"Allianz; car\";12345; Degenia"
         r1 = SortRule(
@@ -50,8 +51,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.assertListEqual(r_list, [r1])
 
     def testReturnMultiSortRule(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line1 = "Insurance;HUK;Degenia"
         csv_line2 = "Car;Shell;Leasing;Gas;Tax"
@@ -66,8 +67,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.assertListEqual(r_list, [r1, r2])
 
     def testPassPathToFileReader(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         FileReader.get_lines = MagicMock()
 
@@ -76,8 +77,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         FileReader.get_lines.assert_called_once_with(SOME_PATH)
 
     def testRaiseExceptionNoCsv(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line1 = "Insurance;HUK;Degenia"
         csv_line2 = "hallo"
@@ -91,8 +92,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testRaiseExceptionNoCategory(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line = ";HUK;Degenia"
         FileReader.get_lines = MagicMock(return_value=[csv_line])
@@ -102,8 +103,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testRaiseExceptionNoPattern(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line = "Car;"
         FileReader.get_lines = MagicMock(return_value=[csv_line])
@@ -113,8 +114,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testRaiseExceptionMissingPattern(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line = "Car;;Leasing;Gas"
         FileReader.get_lines = MagicMock(return_value=[csv_line])
@@ -124,8 +125,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testRaiseExceptionMoreThan100Pattern(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_line = "Car;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a;b;c;d;e;f;g;h;i;k;a"
         FileReader.get_lines = MagicMock(return_value=[csv_line])
@@ -135,8 +136,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testRaiseExceptionMoreThan100SortRules(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         csv_lines = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8,
                      9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
@@ -147,8 +148,8 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testForwardFileReaderExceptions(self):
-        self.file_checker.file_exists = MagicMock(return_value=True)
-        p = CsvSortRuleProvider(self.file_checker, SOME_PATH)
+        FileChecker.file_exists = MagicMock(return_value=True)
+        p = CsvSortRuleProvider(SOME_PATH)
 
         e = "some error"
 
@@ -157,7 +158,7 @@ class ACsvSortRuleProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(e, p.get_sort_rules)
 
     def testExceptionWhenInputPathIsInvalid(self):
-        self.file_checker.file_exists = MagicMock(return_value=False)
+        FileChecker.file_exists = MagicMock(return_value=False)
 
         self.ca.assertRaisesWithMessage(
-            INVALID_INPUT_PATH.format(SOME_PATH), CsvSortRuleProvider, self.file_checker, SOME_PATH)
+            INVALID_INPUT_PATH.format(SOME_PATH), CsvSortRuleProvider, SOME_PATH)

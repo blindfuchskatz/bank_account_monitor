@@ -13,13 +13,12 @@ IS_NOT_ACCOUNT_STATEMENT = "no vr bank account statement"
 
 
 class VrBankTransactionProvider(TransactionProvider):
-    def __init__(self, file_checker: FileChecker, path: str) -> None:
+    def __init__(self, path: str) -> None:
         # todo PWA: refactor -> use static function for file_checker
-        self._file_checker = file_checker
         self._path = path
         # todo PWA: refactor -> move checks to get_transactions
 
-        if not self._file_checker.file_exists(self._path):
+        if not FileChecker.file_exists(self._path):
             raise TransactionProviderException(
                 INVALID_INPUT_PATH.format("VR bank", self._path))
 

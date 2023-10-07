@@ -20,23 +20,24 @@ class AVrBankTransactionProvider(unittest.TestCase):
         self.ca = CustomAssert()
         self.ca.setExceptionType(TransactionProviderException)
         self.get_lines = FileReader.get_lines
-        self.file_checker = FileChecker()
-        self.file_checker.file_exists = MagicMock(return_value=True)
+        self.file_exists = FileChecker.file_exists
+        FileChecker.file_exists = MagicMock(return_value=True)
 
     def tearDown(self):
         FileReader.get_lines = self.get_lines
+        FileChecker.file_exists = self.file_exists
 
     def testReturnEmptyTransactionList(self):
         FileReader.get_lines = MagicMock(return_value=[HEAD_LINE])
 
-        p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
+        p = VrBankTransactionProvider(SOME_PATH)
 
         t_list = p.get_transactions()
         self.assertListEqual(t_list, [])
 
     def testPassPathArgumentToFileReader(self):
         FileReader.get_lines = MagicMock(return_value=[HEAD_LINE])
-        p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
+        p = VrBankTransactionProvider(SOME_PATH)
 
         p.get_transactions()
 
@@ -49,7 +50,7 @@ class AVrBankTransactionProvider(unittest.TestCase):
         tb = Transaction("30.09.2023", "gift", "desc2", 1000023)
         csv_lines = [HEAD_LINE, line1, line2]
         FileReader.get_lines = MagicMock(return_value=csv_lines)
-        p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
+        p = VrBankTransactionProvider(SOME_PATH)
 
         t_list = p.get_transactions()
 
@@ -60,13 +61,13 @@ class AVrBankTransactionProvider(unittest.TestCase):
             side_effect=FileReaderException(SOME_ERROR))
 
         self.ca.assertRaisesWithMessage(
-            PROVIDER_EXCEPTION.format(SOME_ERROR), VrBankTransactionProvider, self.file_checker, SOME_PATH)
+            PROVIDER_EXCEPTION.format(SOME_ERROR), VrBankTransactionProvider, SOME_PATH)
 
     def testForwardTransactionConverterException(self):
         line1 = "servus"
         FileReader.get_lines = MagicMock(return_value=[HEAD_LINE, line1])
 
-        p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
+        p = VrBankTransactionProvider(SOME_PATH)
 
         e = PROVIDER_EXCEPTION.format(
             FORMAT_ERROR_TO_FEW_LINES.format(NUMBER_CSV_ENTRIES, 1))
@@ -77,11 +78,11 @@ class AVrBankTransactionProvider(unittest.TestCase):
 
         e = PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT)
         self.ca.assertRaisesWithMessage(
-            e, VrBankTransactionProvider, self.file_checker, SOME_PATH)
+            e, VrBankTransactionProvider, SOME_PATH)
 
 # todo PWA: refactor
     # def testRaiseExceptionWhenHeadlineMissing(self):
-    #     p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
+    #     p = VrBankTransactionProvider(SOME_PATH)
 
     #     FileReader.get_lines = MagicMock(return_value=[])
     #     self.assertEqual(p.is_account_statement(SOME_PATH), False)
@@ -90,7 +91,7 @@ class AVrBankTransactionProvider(unittest.TestCase):
     #     self.assertEqual(p.is_account_statement(SOME_PATH), False)
 
     def testRaiseExceptionWhenInputPathIsInvalid(self):
-        self.file_checker.file_exists = MagicMock(return_value=False)
+        FileChecker.file_exists = MagicMock(return_value=False)
 
         self.ca.assertRaisesWithMessage(
-            INVALID_INPUT_PATH.format("VR bank", SOME_PATH), VrBankTransactionProvider, self.file_checker, SOME_PATH)
+            INVALID_INPUT_PATH.format("VR bank", SOME_PATH), VrBankTransactionProvider, SOME_PATH)
