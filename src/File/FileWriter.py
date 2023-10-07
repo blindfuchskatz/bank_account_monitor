@@ -5,7 +5,8 @@ FILE_WRITER_ERROR = "Could not open cve output file"
 
 
 class FileWriter:
-    def write(self, output_file, content):
+    @staticmethod
+    def write(output_file, content):
         try:
             f = open(output_file, 'w')
             f.write(content)

@@ -1,4 +1,5 @@
 from src.File.FileChecker import FileChecker
+from src.File.FileWriter import FileWriter
 from src.Presenter.PresenterException import PresenterException
 from src.Presenter.TransactionPresenter import TransactionPresenter
 
@@ -7,8 +8,7 @@ NO_PATH = "Cve presenter error|no input path"
 
 
 class CsvPresenter(TransactionPresenter):
-    def __init__(self, file_writer, input_path) -> None:
-        self.__file_writer = file_writer
+    def __init__(self, input_path) -> None:
         self.__path = input_path
 
         if not self.__path:
@@ -23,7 +23,7 @@ class CsvPresenter(TransactionPresenter):
             csv_out += self.__transform_category_to_csv(
                 category, transaction_list)
 
-        self.__file_writer.write(self.__path, csv_out.strip())
+        FileWriter.write(self.__path, csv_out.strip())
 
     def __transform_category_to_csv(self, category, transaction_list):
         category_out = ""
