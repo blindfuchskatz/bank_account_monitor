@@ -2,10 +2,10 @@ import os
 
 
 class FileChecker:
-    def file_exists(self, file):
+    def file_exists(self, file: str) -> bool:
         return os.path.exists(file) and os.path.isfile(file)
 
-    def dir_of_file_exists(self, file):
+    def dir_of_file_exists(self, file: str) -> bool:
         directory = os.path.dirname(file)
         file = os.path.basename(file)
 
@@ -15,3 +15,7 @@ class FileChecker:
         if os.path.exists(directory) and os.path.isdir(directory):
             return True
         return False
+
+    # todo PWA: move this to DirReader
+    def is_dir(self, file: str) -> bool:
+        return os.path.isdir(file)

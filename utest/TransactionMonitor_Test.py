@@ -29,10 +29,6 @@ error_msg = "some error"
 
 
 class TransactionProviderStub(TransactionProvider):
-    def __init__(self) -> None:
-        file_checker = FileChecker()
-        file_checker.file_exists = MagicMock(return_value=True)
-        super().__init__(file_checker, "path", "stub")
 
     def get_transactions(self):
         return

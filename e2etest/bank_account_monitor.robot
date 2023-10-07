@@ -22,7 +22,6 @@ Sort VR bank account statement by sort rule into csv file
     Then A Csv file with sorted transactions where created    ${SORTED_VRBANK_TRANS}
 
 Sort all skassen and vr bank transactions within a directory
-    [Tags]    tdd_red_phase
     Given A skasse bank statement with three transactions
     And A VR bank account statement with three transactions
     And Two sort rules
@@ -144,6 +143,7 @@ Expect file have content
 delete test files
     Remove Files
     ...    ${SKASSE_BANK_STATEMENT_FILE}
+    ...    ${VR_BANK_STATEMENT_FILE}
     ...    ${SORT_RULE_FILE}
     ...    ${CSV_OUTPUT_FILE}
     ...    ${STDOUT_FILE}

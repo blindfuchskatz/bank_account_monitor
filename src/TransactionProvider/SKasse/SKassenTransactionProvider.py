@@ -3,7 +3,7 @@ from src.File.FileChecker import FileChecker
 from src.File.PdfPageReader import PdfPageReader
 from src.TransactionProvider.SKasse.SKassenTransactionConverter import SKassenTransactionConverter
 from src.TransactionProvider.SKasse.SKassenTransactionExtractor import SKassenTransactionExtractor
-from src.TransactionProvider.TransactionProvider import TransactionProvider
+from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH, TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 
 PROVIDER_EXCEPTION = "SKassen transaction provider error|what:<{}>"
@@ -12,7 +12,13 @@ IS_NOT_ACCOUNT_STATEMENT = "no skassen account statement"
 
 class SKassenTransactionProvider(TransactionProvider):
     def __init__(self, file_checker, path):
-        super().__init__(file_checker, path, "SKassen")
+        self._file_checker = file_checker
+        self._path = path
+        # todo PWA: refactor -> move checks to get_transactions
+        if not self._file_checker.file_exists(self._path):
+            raise TransactionProviderException(
+                INVALID_INPUT_PATH.format("SKassen", self._path))
+
         if not self.is_account_statement():
             raise TransactionProviderException(
                 PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT))

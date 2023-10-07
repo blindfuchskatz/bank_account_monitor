@@ -2,7 +2,7 @@ from typing import List
 from src.File.FileChecker import FileChecker
 from src.File.FileReader import FileReader
 from src.TransactionProvider.Transaction import Transaction
-from src.TransactionProvider.TransactionProvider import TransactionProvider
+from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH, TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 from src.TransactionProvider.VrBank.VrBankTransactionConverter import VrBankTransactionConverter
 
@@ -14,7 +14,15 @@ IS_NOT_ACCOUNT_STATEMENT = "no vr bank account statement"
 
 class VrBankTransactionProvider(TransactionProvider):
     def __init__(self, file_checker: FileChecker, path: str) -> None:
-        super().__init__(file_checker, path, "VR bank")
+        # todo PWA: refactor -> use static function for file_checker
+        self._file_checker = file_checker
+        self._path = path
+        # todo PWA: refactor -> move checks to get_transactions
+
+        if not self._file_checker.file_exists(self._path):
+            raise TransactionProviderException(
+                INVALID_INPUT_PATH.format("VR bank", self._path))
+
         if not self.is_account_statement():
             raise TransactionProviderException(PROVIDER_EXCEPTION.format(
                 IS_NOT_ACCOUNT_STATEMENT))

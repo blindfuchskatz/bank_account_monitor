@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from src.File.FileChecker import FileChecker
+from src.TransactionProvider.MultiTransactionProvider import MultiTransactionProvider
 
 from src.TransactionProvider.SKasse.SKassenTransactionProvider import SKassenTransactionProvider
 from src.TransactionProvider.TransactionProviderFactory import FILE_NOT_EXIST, NOT_A_ACCOUNT_STATEMENT, TransactionProviderFactory
@@ -14,7 +15,9 @@ SOME_PATH = "some path"
 class ATransactionProviderFactory(unittest.TestCase):
     def setUp(self) -> None:
         self.file_exists = FileChecker.file_exists
+        self.is_dir = FileChecker.is_dir
         FileChecker.file_exists = MagicMock(return_value=True)
+        FileChecker.is_dir = MagicMock(return_value=False)
 
         self.ca = CustomAssert()
         self.ca.setExceptionType(TransactionProviderFactoryException)
@@ -26,6 +29,7 @@ class ATransactionProviderFactory(unittest.TestCase):
 
     def tearDown(self) -> None:
         FileChecker.file_exists = self.file_exists
+        FileChecker.is_dir = self.is_dir
         SKassenTransactionProvider.is_account_statement = self.skassen_is_account_statement
         VrBankTransactionProvider.is_account_statement = self.vrbank_is_account_statement
 
@@ -55,6 +59,13 @@ class ATransactionProviderFactory(unittest.TestCase):
         p = self.factory.get_transaction_provider(SOME_PATH)
 
         self.assertEqual(type(p), VrBankTransactionProvider)
+
+    def testReturnMultiTransactionProvider(self):
+        FileChecker.is_dir = MagicMock(return_value=True)
+
+        p = self.factory.get_transaction_provider(SOME_PATH)
+
+        self.assertEqual(type(p), MultiTransactionProvider)
 
     def testPathIsPassedToVrBankTransactionProvider(self):
         SKassenTransactionProvider.is_account_statement = MagicMock(

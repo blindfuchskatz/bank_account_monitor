@@ -79,12 +79,15 @@ class AVrBankTransactionProvider(unittest.TestCase):
         self.ca.assertRaisesWithMessage(
             e, VrBankTransactionProvider, self.file_checker, SOME_PATH)
 
-    def tesRaiseExceptionWhenHeadlineMissing(self):
-        FileReader.get_lines = MagicMock(return_value=[])
-        self.assertEqual(self.p.is_account_statement(SOME_PATH), False)
+# todo PWA: refactor
+    # def testRaiseExceptionWhenHeadlineMissing(self):
+    #     p = VrBankTransactionProvider(self.file_checker, SOME_PATH)
 
-        FileReader.get_lines = MagicMock(return_value=["hello"])
-        self.assertEqual(self.p.is_account_statement(SOME_PATH), False)
+    #     FileReader.get_lines = MagicMock(return_value=[])
+    #     self.assertEqual(p.is_account_statement(SOME_PATH), False)
+
+    #     FileReader.get_lines = MagicMock(return_value=["hello"])
+    #     self.assertEqual(p.is_account_statement(SOME_PATH), False)
 
     def testRaiseExceptionWhenInputPathIsInvalid(self):
         self.file_checker.file_exists = MagicMock(return_value=False)

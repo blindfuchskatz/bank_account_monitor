@@ -26,12 +26,13 @@ SORTED_VRBANK_TRANS = """misc;01.09.2023;Debit;"Food";-5.83
 Car;01.09.2023;Debit;"Leasing";-310.90
 Insurance;01.09.2023;Debit;"Allianz";-890.83"""
 
-SORTED_SKASSEN_VRBANK_TRANS = """misc;31.08.2023;Debit;"Food";-5.83
-Car;31.08.2023;Debit;"Leasing";-310.90
-Insurance;31.08.2023;Debit;"Allianz";-890.83
-misc;01.09.2023;Debit;"Food";-5.83
+SORTED_SKASSEN_VRBANK_TRANS = """misc;01.09.2023;Debit;"Food";-5.83
+misc;31.08.2023;Debit;"Food";-5.83
 Car;01.09.2023;Debit;"Leasing";-310.90
-Insurance;01.09.2023;Debit;"Allianz";-890.83"""
+Car;31.08.2023;Debit;"Leasing";-310.90
+Insurance;01.09.2023;Debit;"Allianz";-890.83
+Insurance;31.08.2023;Debit;"Allianz";-890.83"""
+
 
 ALL_MISC_TRANSACTION_CSV = """misc;31.08.2023;Debit;"Leasing";-310.90
 misc;31.08.2023;Debit;"Allianz";-890.83
