@@ -1,4 +1,5 @@
 from src.File.FileChecker import FileChecker
+from src.TransactionProvider.Factory import Factory
 from src.TransactionProvider.MultiTransactionProvider import MultiTransactionProvider
 from src.TransactionProvider.SKasse.SKassenTransactionProvider import SKassenTransactionProvider
 from src.TransactionProvider.TransactionProvider import TransactionProvider
@@ -10,12 +11,12 @@ NOT_A_ACCOUNT_STATEMENT = "Not supported bank account statement file|file:<{}>"
 FILE_NOT_EXIST = "Account statement file does not exist:<{}>"
 
 
-class TransactionProviderFactory:
+class TransactionProviderFactory(Factory):
     def get_transaction_provider(self, path: str) -> TransactionProvider:
         file_checker = FileChecker()
 
         if (file_checker.is_dir(path)):
-            return MultiTransactionProvider(file_checker, path)
+            return MultiTransactionProvider(file_checker, path, self)
 
         if not file_checker.file_exists(path):
             raise TransactionProviderFactoryException(
