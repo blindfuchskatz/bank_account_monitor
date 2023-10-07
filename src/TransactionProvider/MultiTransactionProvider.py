@@ -13,7 +13,7 @@ class MultiTransactionProvider(TransactionProvider):
         self.tp_factory = tp_factory
 
     def get_transactions(self):
-        if not self.file_checker.is_dir(self.dir):
+        if not DirReader.is_dir(self.dir):
             raise TransactionProviderException(
                 INVALID_INPUT_PATH.format("Multi", "dir does not exist"))
 

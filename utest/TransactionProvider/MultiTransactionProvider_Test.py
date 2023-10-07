@@ -28,9 +28,12 @@ tpStub = TPStub()
 class AMultiTransactionProvider(unittest.TestCase):
     def setUp(self) -> None:
         self.tpf = TransactionProviderFactory()
+
         self.get_files_in_dir = DirReader.get_files_in_dir
+        self.is_dir = DirReader.is_dir
+        DirReader.is_dir = MagicMock(side_effect=[True, False])
+
         self.file_checker = FileChecker()
-        self.file_checker.is_dir = MagicMock(side_effect=[True, False])
 
         self.p = MultiTransactionProvider(
             self.file_checker, SOME_DIR, self.tpf)
@@ -40,10 +43,11 @@ class AMultiTransactionProvider(unittest.TestCase):
 
     def tearDown(self) -> None:
         DirReader.get_files_in_dir = self.get_files_in_dir
+        DirReader.is_dir = self.is_dir
 
     def testReturnEmptyListWhenDirIsEmpty(self):
         DirReader.get_files_in_dir = MagicMock(return_value=[])
-        self.file_checker.is_dir = MagicMock(return_value=True)
+        DirReader.is_dir = MagicMock(return_value=True)
 
         t_list = self.p.get_transactions()
 
@@ -79,7 +83,7 @@ class AMultiTransactionProvider(unittest.TestCase):
 
     def testRaiseExceptionWhenDirNotExists(self):
         DirReader.get_files_in_dir = MagicMock()
-        self.file_checker.is_dir = MagicMock(return_value=False)
+        DirReader.is_dir = MagicMock(return_value=False)
 
         self.ca.assertRaisesWithMessage(
             INVALID_INPUT_PATH.format("Multi", "dir does not exist"), self.p.get_transactions)

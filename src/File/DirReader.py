@@ -8,3 +8,7 @@ class DirReader:
             dir) if os.path.isfile(os.path.join(dir, filename))]
 
         return files_in_folder
+
+    @staticmethod
+    def is_dir(file: str) -> bool:
+        return os.path.isdir(file)

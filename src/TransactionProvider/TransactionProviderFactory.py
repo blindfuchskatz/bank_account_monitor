@@ -1,3 +1,4 @@
+from src.File.DirReader import DirReader
 from src.File.FileChecker import FileChecker
 from src.TransactionProvider.Factory import Factory
 from src.TransactionProvider.MultiTransactionProvider import MultiTransactionProvider
@@ -15,7 +16,7 @@ class TransactionProviderFactory(Factory):
     def get_transaction_provider(self, path: str) -> TransactionProvider:
         file_checker = FileChecker()
 
-        if (file_checker.is_dir(path)):
+        if (DirReader.is_dir(path)):
             return MultiTransactionProvider(file_checker, path, self)
 
         if not file_checker.file_exists(path):

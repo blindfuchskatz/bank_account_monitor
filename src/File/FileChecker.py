@@ -15,7 +15,3 @@ class FileChecker:
         if os.path.exists(directory) and os.path.isdir(directory):
             return True
         return False
-
-    # todo PWA: move this to DirReader
-    def is_dir(self, file: str) -> bool:
-        return os.path.isdir(file)
