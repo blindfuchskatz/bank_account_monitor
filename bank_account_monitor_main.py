@@ -17,7 +17,7 @@ if __name__ == '__main__':
     try:
         parser = ArgumentParser()
         parser.add_argument('-t', '--transaction_path',
-                            help='path to transaction file', required=True, action='store')
+                            help='path to a specific transaction file or a directory containing multiple transaction files', required=True, action='store')
         parser.add_argument('-r', '--sort_rule_path',
                             help='path to sort rules', required=True, action='store')
         parser.add_argument('-o', '--csv_output_file',
