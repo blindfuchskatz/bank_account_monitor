@@ -29,5 +29,5 @@ class TransactionProviderFactory(Factory):
         what = NOT_A_ACCOUNT_STATEMENT.format(path)
         raise TransactionProviderFactoryException(what)
 
-    def file_exists(self, path):
+    def file_exists(self, path: str) -> bool:
         return FileChecker.file_exists(path)

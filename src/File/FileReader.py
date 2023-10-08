@@ -3,7 +3,7 @@ from src.File.FileReaderException import FileReaderException
 
 class FileReader:
     @staticmethod
-    def read_file_content(path):
+    def read_file_content(path: str) -> str:
         try:
             input_file = open(path)
             file_content = input_file.read()
@@ -15,7 +15,7 @@ class FileReader:
                 f"File reader error|Could not open file|file:<{path}>")
 
     @staticmethod
-    def get_lines(path):
+    def get_lines(path: str) -> list:
         line_list = []
 
         for line in FileReader.read_file_content(path).splitlines():

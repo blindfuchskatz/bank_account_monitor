@@ -2,13 +2,14 @@ from src.File.FileChecker import FileChecker
 from src.File.FileWriter import FileWriter
 from src.Presenter.PresenterException import PresenterException
 from src.Presenter.TransactionPresenter import TransactionPresenter
+from src.Sort.TransactionDict import TransactionDict
 
 INVALID_INPUT_PATH = "Cve presenter error|invalid input path|path:<{}>"
 NO_PATH = "Cve presenter error|no input path"
 
 
 class CsvPresenter(TransactionPresenter):
-    def __init__(self, input_path) -> None:
+    def __init__(self, input_path: str) -> None:
         self.__path = input_path
 
         if not self.__path:
@@ -16,7 +17,7 @@ class CsvPresenter(TransactionPresenter):
         elif not FileChecker.dir_of_file_exists(self.__path):
             raise PresenterException(INVALID_INPUT_PATH.format(self.__path))
 
-    def present(self, transaction_dict):
+    def present(self, transaction_dict: TransactionDict) -> None:
         csv_out = ""
 
         for category, transaction_list in transaction_dict.items():

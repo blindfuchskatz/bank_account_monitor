@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 
 
 @dataclass
@@ -7,3 +8,6 @@ class Transaction:
     type: str
     desc: str
     value: int
+
+
+TransactionList = List[Transaction]

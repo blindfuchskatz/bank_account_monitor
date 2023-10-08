@@ -11,7 +11,7 @@ NUMBER_CSV_ENTRIES = 19
 
 
 class VrBankTransactionConverter:
-    def convert(self, transaction_string):
+    def convert(self, transaction_string: str) -> Transaction:
         regex_patter = r'(?:^|;)(?:"([^"]*(?:""[^"]*)*)"|([^";]*))'
 
         matches = re.findall(regex_patter, transaction_string)

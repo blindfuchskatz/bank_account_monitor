@@ -1,6 +1,6 @@
 import re
 from src.File.FileChecker import FileChecker
-from src.Sort.SortRule import SortRule
+from src.Sort.SortRule import SortRule, SortRuleList
 from src.File.FileReader import FileReader
 from src.Sort.SortRuleProvider import SortRuleProvider
 from src.Sort.SortRuleProviderException import SortRuleProviderException
@@ -17,14 +17,14 @@ INVALID_INPUT_PATH = "Cve sort rule error|invalid input path|path:<{}>"
 
 
 class CsvSortRuleProvider(SortRuleProvider):
-    def __init__(self, path) -> None:
+    def __init__(self, path: str) -> None:
         self.__path = path
 
         if not FileChecker.file_exists(self.__path):
             raise SortRuleProviderException(
                 INVALID_INPUT_PATH.format(self.__path))
 
-    def get_sort_rules(self):
+    def get_sort_rules(self) -> SortRuleList:
         try:
             csv_lines = FileReader.get_lines(self.__path)
 

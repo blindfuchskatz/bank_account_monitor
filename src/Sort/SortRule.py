@@ -1,3 +1,4 @@
+from typing import List
 from dataclasses import dataclass
 
 
@@ -5,3 +6,6 @@ from dataclasses import dataclass
 class SortRule:
     category: str
     pattern_list: list
+
+
+SortRuleList = List[SortRule]

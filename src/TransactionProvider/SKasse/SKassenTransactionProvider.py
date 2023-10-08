@@ -3,6 +3,7 @@ from src.File.FileChecker import FileChecker
 from src.File.PdfPageReader import PdfPageReader
 from src.TransactionProvider.SKasse.SKassenTransactionConverter import SKassenTransactionConverter
 from src.TransactionProvider.SKasse.SKassenTransactionExtractor import SKassenTransactionExtractor
+from src.TransactionProvider.Transaction import TransactionList
 from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH, TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 
@@ -11,10 +12,10 @@ IS_NOT_ACCOUNT_STATEMENT = "no skassen account statement"
 
 
 class SKassenTransactionProvider(TransactionProvider):
-    def __init__(self, path):
+    def __init__(self, path: str):
         self._path = path
 
-    def get_transactions(self):
+    def get_transactions(self) -> TransactionList:
         if not FileChecker.file_exists(self._path):
             raise TransactionProviderException(
                 INVALID_INPUT_PATH.format("SKassen", self._path))

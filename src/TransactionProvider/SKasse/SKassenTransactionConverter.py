@@ -6,7 +6,7 @@ TRANSACTION_FORMAT_ERROR = "SKassen converter illegal transaction format|{} is m
 
 
 class SKassenTransactionConverter:
-    def convert(self, transaction_string):
+    def convert(self, transaction_string: str) -> Transaction:
         t_date = self.__get_date(transaction_string)
         t_type = self.__get_type(transaction_string)
         t_desc = self.__get_description(transaction_string)

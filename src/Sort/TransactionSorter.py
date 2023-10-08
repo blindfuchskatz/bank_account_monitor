@@ -1,12 +1,15 @@
+from src.Sort.SortRule import SortRuleList
 from src.Sort.Sorted import Sorted
+from src.Sort.TransactionDict import TransactionDict
 from src.Sort.TransactionSorterException import TransactionSorterException
+from src.TransactionProvider.Transaction import TransactionList
 
 
 SORT_ERROR = "Transaction assignment ambiguous|Transaction desc:<{}>|Categories:<{},{}>|Pattern:<{},{}>"
 
 
 class TransactionSorter:
-    def sort(self, transactions, sort_rule_set):
+    def sort(self, transactions: TransactionList, sort_rule_set: SortRuleList) -> TransactionDict:
 
         if sort_rule_set:
             return self.__sort(transactions, sort_rule_set)
