@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from src.File.FileChecker import FileChecker
 from src.File.PdfPageReader import PdfPageReader
 from src.File.PdfReaderException import PdfReaderException
+from src.TransactionProvider.SKasse.SKassenTransactionExtractor import SKassenTransactionExtractor
 from src.TransactionProvider.SKasse.SKassenTransactionProvider import IS_NOT_ACCOUNT_STATEMENT, PROVIDER_EXCEPTION, SKassenTransactionProvider
 from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
@@ -33,11 +34,12 @@ class ASKassenTransactionProvider(unittest.TestCase):
 
         self.read_file_content = PdfPageReader.read_file_content
         self.is_pdf = PdfPageReader.is_pdf
-
         PdfPageReader.is_pdf = MagicMock(return_value=True)
 
         self.ca = CustomAssert()
         self.ca.setExceptionType(TransactionProviderException)
+
+        self.p = SKassenTransactionProvider(SOME_PATH)
 
     def tearDown(self):
         PdfPageReader.read_file_content = self.read_file_content
@@ -48,18 +50,14 @@ class ASKassenTransactionProvider(unittest.TestCase):
         PdfPageReader.read_file_content = MagicMock(
             return_value="Skassen:no transaction")
 
-        p = SKassenTransactionProvider(SOME_PATH)
-
-        t_list = p.get_transactions()
+        t_list = self.p.get_transactions()
         self.assertListEqual(t_list, [])
 
     def testParseTransaction(self):
         PdfPageReader.read_file_content = MagicMock(
             return_value=transactionGutschrift)
 
-        p = SKassenTransactionProvider(SOME_PATH)
-
-        t_list = p.get_transactions()
+        t_list = self.p.get_transactions()
 
         self.assertListEqual(t_list, [ta, tb])
 
@@ -67,9 +65,7 @@ class ASKassenTransactionProvider(unittest.TestCase):
         PdfPageReader.read_file_content = MagicMock(
             return_value=transactionGutschrift)
 
-        p = SKassenTransactionProvider(SOME_PATH)
-
-        p.get_transactions()
+        self.p.get_transactions()
         PdfPageReader.read_file_content.assert_called_with(SOME_PATH)
 
     def testRaiseExceptionIfNoPdfFile(self):
@@ -77,7 +73,7 @@ class ASKassenTransactionProvider(unittest.TestCase):
             return_value=False)
 
         self.ca.assertRaisesWithMessage(
-            PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT), SKassenTransactionProvider, SOME_PATH)
+            PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT), self.p.get_transactions)
 
     def testRaiseExceptionIfNoSKassenPattern(self):
         PdfPageReader.is_pdf = MagicMock(
@@ -87,24 +83,36 @@ class ASKassenTransactionProvider(unittest.TestCase):
             return_value="Vr bank")
 
         self.ca.assertRaisesWithMessage(
-            PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT), SKassenTransactionProvider, SOME_PATH)
+            PROVIDER_EXCEPTION.format(IS_NOT_ACCOUNT_STATEMENT), self.p.get_transactions)
 
     def testForwardPdfReaderException(self):
         PdfPageReader.read_file_content = MagicMock(
-            side_effect=PdfReaderException(SOME_ERROR))
+            side_effect=PdfReaderException("e"))
 
         self.ca.assertRaisesWithMessage(
-            PROVIDER_EXCEPTION.format(SOME_ERROR), SKassenTransactionProvider, SOME_PATH)
+            PROVIDER_EXCEPTION.format("e"), self.p.get_transactions)
+
+    def testForwardExtractorException(self):
+        PdfPageReader.read_file_content = MagicMock(
+            return_value="Skassen:no transaction")
+        extract = SKassenTransactionExtractor.extract
+
+        SKassenTransactionExtractor.extract = MagicMock(
+            side_effect=Exception("error"))
+        self.ca.assertRaisesWithMessage(
+            PROVIDER_EXCEPTION.format("error"), self.p.get_transactions)
+
+        SKassenTransactionExtractor.extract = extract
 
     def testForwardTransactionConverterException(self):
         PdfPageReader.read_file_content = MagicMock(
             side_effect=TransactionConverterException(SOME_ERROR))
 
         self.ca.assertRaisesWithMessage(
-            PROVIDER_EXCEPTION.format(SOME_ERROR), SKassenTransactionProvider, SOME_PATH)
+            PROVIDER_EXCEPTION.format(SOME_ERROR), self.p.get_transactions)
 
     def testRaiseExceptionWhenInputPathIsInvalid(self):
         FileChecker.file_exists = MagicMock(return_value=False)
 
         self.ca.assertRaisesWithMessage(
-            INVALID_INPUT_PATH.format("SKassen", SOME_PATH), SKassenTransactionProvider, SOME_PATH)
+            INVALID_INPUT_PATH.format("SKassen", SOME_PATH), self.p.get_transactions)

@@ -1,5 +1,4 @@
 from src.File.DirReader import DirReader
-from src.File.FileChecker import FileChecker
 from src.TransactionProvider.Factory import Factory
 from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH, TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
@@ -28,3 +27,6 @@ class MultiTransactionProvider(TransactionProvider):
                 continue
 
         return t_list
+
+    def is_needed(self):
+        return DirReader.is_dir(self.dir)

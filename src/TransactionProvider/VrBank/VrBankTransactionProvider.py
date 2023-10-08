@@ -14,9 +14,9 @@ IS_NOT_ACCOUNT_STATEMENT = "no vr bank account statement"
 
 class VrBankTransactionProvider(TransactionProvider):
     def __init__(self, path: str) -> None:
-        # todo PWA: refactor -> use static function for file_checker
         self._path = path
-        # todo PWA: refactor -> move checks to get_transactions
+
+    def get_transactions(self) -> List[Transaction]:
 
         if not FileChecker.file_exists(self._path):
             raise TransactionProviderException(
@@ -26,7 +26,6 @@ class VrBankTransactionProvider(TransactionProvider):
             raise TransactionProviderException(PROVIDER_EXCEPTION.format(
                 IS_NOT_ACCOUNT_STATEMENT))
 
-    def get_transactions(self) -> List[Transaction]:
         try:
             csv_line_list = FileReader.get_lines(self._path)
             t_list = []

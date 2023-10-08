@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
 from src.File.DirReader import DirReader
-from src.File.FileChecker import FileChecker
 from src.TransactionProvider.MultiTransactionProvider import MultiTransactionProvider
 from src.TransactionProvider.Transaction import Transaction
 from src.TransactionProvider.TransactionProvider import INVALID_INPUT_PATH, TransactionProvider
@@ -67,6 +66,10 @@ class AMultiTransactionProvider(unittest.TestCase):
         t_list = self.p.get_transactions()
 
         self.assertListEqual(t_list, [ta, tb, ta, tb, ta, tb])
+
+    def testRecognizeIfItIsNeeded(self):
+        DirReader.is_dir = MagicMock(return_value=False)
+        self.assertEqual(False, self.p.is_needed())
 
     def testIgnoreNotAccountStatementFiles(self):
         DirReader.get_files_in_dir = MagicMock(return_value=["/a", "/b", "/c"])
