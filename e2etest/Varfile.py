@@ -44,7 +44,8 @@ HELP_TEXT = """usage: bank_account_monitor_main.py [-h] -t TRANSACTION_PATH -r S
 options:
   -h, --help            show this help message and exit
   -t TRANSACTION_PATH, --transaction_path TRANSACTION_PATH
-                        path to transaction file
+                        path to a specific transaction file or a directory
+                        containing multiple transaction files
   -r SORT_RULE_PATH, --sort_rule_path SORT_RULE_PATH
                         path to sort rules
   -o CSV_OUTPUT_FILE, --csv_output_file CSV_OUTPUT_FILE
