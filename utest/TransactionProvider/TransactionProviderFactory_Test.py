@@ -4,6 +4,7 @@ from src.File.FileChecker import FileChecker
 from src.TransactionProvider.MultiTransactionProvider import MultiTransactionProvider
 
 from src.TransactionProvider.SKasse.SKassenTransactionProvider import SKassenTransactionProvider
+from src.TransactionProvider.TransactionProviderException import TransactionProviderException
 from src.TransactionProvider.TransactionProviderFactory import FILE_NOT_EXIST, NOT_A_ACCOUNT_STATEMENT, TransactionProviderFactory
 from src.TransactionProvider.TransactionProviderFactoryException import TransactionProviderFactoryException
 from src.TransactionProvider.VrBank.VrBankTransactionProvider import VrBankTransactionProvider
@@ -125,3 +126,13 @@ class ATransactionProviderFactory(unittest.TestCase):
 
         self.ca.assertRaisesWithMessage(
             FILE_NOT_EXIST.format(SOME_PATH), self.factory.get_transaction_provider, SOME_PATH)
+
+    def testForwardProviderException(self):
+        MultiTransactionProvider.is_needed = MagicMock(return_value=False)
+        SKassenTransactionProvider.is_account_statement = MagicMock(
+            side_effect=TransactionProviderException("some error"))
+        VrBankTransactionProvider.is_account_statement = MagicMock(
+            return_value=False)
+
+        self.ca.assertRaisesWithMessage(
+            NOT_A_ACCOUNT_STATEMENT.format(SOME_PATH), self.factory.get_transaction_provider, SOME_PATH)

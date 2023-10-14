@@ -25,6 +25,7 @@ Sort all skassen and vr bank transactions within a directory
     Given A skasse bank statement with three transactions
     And A VR bank account statement with three transactions
     And Two sort rules
+    And Some other file
     When Bank account monitor is called    ${ANALYZE_DIR}    ${SORT_RULE_FILE}    ${CSV_OUTPUT_FILE}
     Then A Csv file with sorted transactions where created    ${SORTED_SKASSEN_VRBANK_TRANS}
 
@@ -79,6 +80,9 @@ Two sort rules
 
 No Sort rule
     Create File    ${SORT_RULE_FILE}
+
+Some other file
+    Copy File    ./e2etest/test_files/ods_data.ods    ${ANALYZE_DIR}
 
 Bank account monitor is called
     [Arguments]    ${bank_statement_file}    ${sort_rule_file}    ${output_file}
@@ -142,9 +146,6 @@ Expect file have content
 
 delete test files
     Remove Files
-    ...    ${SKASSE_BANK_STATEMENT_FILE}
-    ...    ${VR_BANK_STATEMENT_FILE}
-    ...    ${SORT_RULE_FILE}
-    ...    ${CSV_OUTPUT_FILE}
     ...    ${STDOUT_FILE}
     ...    ${STDERR_FILE}
+    Remove Directory    ${ANALYZE_DIR}    True
