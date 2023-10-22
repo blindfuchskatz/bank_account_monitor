@@ -11,5 +11,6 @@ from utest.Sort.CsvSortRuleProvider_Test import ACsvSortRuleProvider
 from utest.File.FileReader_Test import AFileReader
 from utest.TransactionMonitor_Test import ATransactionMonitor
 from utest.Presenter.CsvPresenter_Test import ACsvPresenter
+from utest.Presenter.SavingsPresenter_Test import ASavingsPresenter
 if __name__ == '__main__':
     unittest.main()

@@ -10,6 +10,8 @@ RUN pip install pypdf
 RUN pip install coverage
 #Used as static type checker for Python
 RUN pip install mypy
+#Used for pie chart presenter
+RUN pip install matplotlib
 #Used for end to end tests
 RUN pip install robotframework
 RUN pip install robotframework-debuglibrary
