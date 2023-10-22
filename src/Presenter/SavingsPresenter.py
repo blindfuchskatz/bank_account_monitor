@@ -1,11 +1,12 @@
 from typing import List
 from src.Presenter.Plotter import Plotter
+from src.Presenter.TransactionPresenter import TransactionPresenter
 
 from src.Sort.TransactionDict import TransactionDict
 from src.TransactionProvider.Transaction import Transaction
 
 
-class SavingsPresenter:
+class SavingsPresenter(TransactionPresenter):
     def __init__(self, title: str, plotter: Plotter, ignore_list: list[str]) -> None:
         self.__plotter = plotter
         self.__title = title

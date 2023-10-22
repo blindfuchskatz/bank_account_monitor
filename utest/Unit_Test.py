@@ -12,5 +12,6 @@ from utest.File.FileReader_Test import AFileReader
 from utest.TransactionMonitor_Test import ATransactionMonitor
 from utest.Presenter.CsvPresenter_Test import ACsvPresenter
 from utest.Presenter.SavingsPresenter_Test import ASavingsPresenter
+from utest.Presenter.PresenterFactory_Test import APresenterFactory
 if __name__ == '__main__':
     unittest.main()

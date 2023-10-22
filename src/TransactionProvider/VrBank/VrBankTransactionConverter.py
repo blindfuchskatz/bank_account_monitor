@@ -1,4 +1,5 @@
 import re
+from src.CsvPattern import CSV_REGEX_PATTERN
 from src.TransactionProvider.Transaction import Transaction
 from src.TransactionProvider.TransactionConverterException import TransactionConverterException
 
@@ -12,9 +13,8 @@ NUMBER_CSV_ENTRIES = 19
 
 class VrBankTransactionConverter:
     def convert(self, transaction_string: str) -> Transaction:
-        regex_patter = r'(?:^|;)(?:"([^"]*(?:""[^"]*)*)"|([^";]*))'
 
-        matches = re.findall(regex_patter, transaction_string)
+        matches = re.findall(CSV_REGEX_PATTERN, transaction_string)
         csv_list = [match[0] or match[1] for match in matches]
 
         if len(csv_list) < NUMBER_CSV_ENTRIES:
