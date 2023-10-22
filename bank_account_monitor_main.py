@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser
-from src.Presenter.CsvPresenter import CsvPresenter
 from src.Logger import Logger
+from src.Presenter.PresenterFactory import PresenterFactory
 from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
 from src.TransactionMonitor import TransactionMonitor
 from src.Sort.TransactionSorter import TransactionSorter
@@ -21,16 +21,22 @@ if __name__ == '__main__':
         parser.add_argument('-r', '--sort_rule_path',
                             help='path to sort rules', required=True, action='store')
         parser.add_argument('-o', '--csv_output_file',
-                            help='path to csv_output_file (including file name)', required=True, action='store')
+                            help='(optional) path to csv_output_file (including file name)', default="",  action='store')
+        parser.add_argument('-s', '--savings', help='(optional) depict distribution of incomings and debits via pie chart',
+                            default="", action='store')
         parser.add_argument('-v', '--version', action='version',
                             version='{version}'.format(version=__version__))
         arguments = parser.parse_args()
 
-        f = TransactionProviderFactory()
-        trans_provider = f.get_transaction_provider(arguments.transaction_path)
+        tf = TransactionProviderFactory()
+        pf = PresenterFactory()
+        trans_provider = tf.get_transaction_provider(
+            arguments.transaction_path)
+
         sort_rule_provider = CsvSortRuleProvider(arguments.sort_rule_path)
         sorter = TransactionSorter()
-        presenter = CsvPresenter(arguments.csv_output_file)
+
+        presenter = pf.get(arguments.csv_output_file, arguments.savings)
 
         monitor = TransactionMonitor(
             trans_provider, sort_rule_provider, sorter, presenter, logger)

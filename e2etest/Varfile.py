@@ -39,7 +39,7 @@ misc;31.08.2023;Debit;"Allianz";-890.83
 misc;31.08.2023;Debit;"Food";-5.83"""
 EMPTY_MISC_CSV = "misc;"
 HELP_TEXT = """usage: bank_account_monitor_main.py [-h] -t TRANSACTION_PATH -r SORT_RULE_PATH
-                                    -o CSV_OUTPUT_FILE [-v]
+                                    [-o CSV_OUTPUT_FILE] [-s SAVINGS] [-v]
 
 options:
   -h, --help            show this help message and exit
@@ -49,12 +49,16 @@ options:
   -r SORT_RULE_PATH, --sort_rule_path SORT_RULE_PATH
                         path to sort rules
   -o CSV_OUTPUT_FILE, --csv_output_file CSV_OUTPUT_FILE
-                        path to csv_output_file (including file name)
+                        (optional) path to csv_output_file (including file
+                        name)
+  -s SAVINGS, --savings SAVINGS
+                        (optional) depict distribution of incomings and debits
+                        via pie chart
   -v, --version         show program's version number and exit
 """
 
 MISSING_BANK_STATEMENT = """usage: bank_account_monitor_main.py [-h] -t TRANSACTION_PATH -r SORT_RULE_PATH
-                                    -o CSV_OUTPUT_FILE [-v]
+                                    [-o CSV_OUTPUT_FILE] [-s SAVINGS] [-v]
 bank_account_monitor_main.py: error: the following arguments are required: -t/--transaction_path
 """
 
@@ -62,7 +66,7 @@ EXCEPTION_INVALID_BANK_STATEMENT = """Account statement file does not exist:</so
 """
 EXCEPTION_INVALID_SORT_RULE = """Cve sort rule error|invalid input path|path:</some/path.txt>
 """
-EXCEPTION_INVALID_OUTPUT = """Cve presenter error|invalid input path|path:</tmp/>
+EXCEPTION_INVALID_OUTPUT = """Presenter selection error|what:<Cve presenter error|invalid input path|path:</tmp/>>
 """
 EXCEPTION_INVALID_OUTPUT2 = """Cve presenter error|invalid input path|path:</tmp/somefile.txt>
 """
