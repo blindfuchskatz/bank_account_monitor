@@ -62,6 +62,19 @@ The Syntax is as follows:
 
         <Category>;<Date>;<TransactionType>;<Description>;<Value>
 
+It is also possible to let the Bank Account Monitor plot a savings distribution of the incomings and debits of the account statement as pie chart.
+We can achieve this by calling the Bank Account Monitor as follows:
+
+        python3 ./bank_account_monitor_main.py \
+        -t ./analyze/bank_account_statement_file \
+        -r ./analyze/sort_rule_file \
+        -o ./analyze/output_file
+        -s <title;category1;category2>
+
+The *-o* parameter is optional in that case.
+The CSV string passed by the parameter *-s*, contains the title of the pie chart as well as a list of categories which shall be ignored.
+This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances. It is possible to pass only the title without ignore list.
+
 ## *Testing*
 
 The overall project is developed in a test-driven approach. If you want to extend the project with your own written transaction provider for a specific bank, you can use the unit and end-to-end tests of this project.
