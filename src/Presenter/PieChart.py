@@ -5,7 +5,7 @@ from src.Presenter.Plotter import Plotter
 
 
 class PieChart(Plotter):
-    def plot(self, title: str, data_dict: Dict) -> None:
+    def plot(self, title: str, data_dict: Dict[str, int]) -> None:
 
         labels = list(data_dict.keys())
         sizes = list(data_dict.values())

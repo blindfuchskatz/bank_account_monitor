@@ -51,7 +51,7 @@ class SavingsPresenter(TransactionPresenter):
 
         return plot_dict
 
-    def __calc_sum(self, transaction_list):
+    def __calc_sum(self, transaction_list: List[Transaction]):
         calc_sum = 0
 
         for t in transaction_list:

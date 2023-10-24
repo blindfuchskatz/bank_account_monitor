@@ -4,5 +4,5 @@ from typing import Dict
 
 class Plotter:
     @abstractmethod
-    def plot(self, title: str, data_dict: Dict):
+    def plot(self, title: str, data_dict: Dict[str, int]) -> None:
         pass

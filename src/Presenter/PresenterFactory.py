@@ -5,6 +5,7 @@ from src.CsvPattern import CSV_REGEX_PATTERN
 from src.Presenter.CsvPresenter import CsvPresenter
 from src.Presenter.MultiPresenter import MultiPresenter
 from src.Presenter.PieChart import PieChart
+from src.Presenter.Plotter import Plotter
 from src.Presenter.PresenterException import PresenterException
 from src.Presenter.PresenterFactoryException import PresenterFactoryException
 from src.Presenter.SavingsPresenter import SavingsPresenter
@@ -37,7 +38,7 @@ class PresenterFactory:
         msg = PRESENTER_FACTORY_ERROR.format(INVALID_INPUT)
         raise PresenterFactoryException(msg)
 
-    def get_plotter(self):
+    def get_plotter(self) -> Plotter:
         return self.plotter
 
     def __separate_title_and_ignore_list(self, plotter_data):
