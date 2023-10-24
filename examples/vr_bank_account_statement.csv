@@ -1,0 +1,10 @@
+Bezeichnung Auftragskonto;IBAN Auftragskonto;BIC Auftragskonto;Bankname Auftragskonto;Buchungstag;Valutadatum;Name Zahlungsbeteiligter;IBAN Zahlungsbeteiligter;BIC (SWIFT-Code) Zahlungsbeteiligter;Buchungstext;Verwendungszweck;Betrag;Waehrung;Saldo nach Buchung;Bemerkung;Kategorie;Steuerrelevant;Glaeubiger ID;Mandatsreferenz
+Not relevant;Not relevant;Not relevant;Not relevant;01.09.2023;01.09.2023;Not relevant;Not relevant;Not relevant;Debit;Some Leasing Debit;-1010,90;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;02.09.2023;02.09.2023;Not relevant;Not relevant;Not relevant;Debit;Allianz insurance;-890,83;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;03.09.2023;03.09.2023;Not relevant;Not relevant;Not relevant;Debit;Edeka food store;-1500,83;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;04.09.2023;04.09.2023;Not relevant;Not relevant;Not relevant;Debit;Gas station Shell;-190,83;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;05.09.2023;05.09.2023;Not relevant;Not relevant;Not relevant;Debit;Deutsche Bank;-1590,83;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;05.09.2023;05.09.2023;Not relevant;Not relevant;Not relevant;Debit;My employer;10000,90;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;05.09.2023;05.09.2023;Not relevant;Not relevant;Not relevant;Debit;Fund savings plan ;-3000,00;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;05.09.2023;05.09.2023;Not relevant;Not relevant;Not relevant;Debit;Amazon debit ;-1298,78;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant
+Not relevant;Not relevant;Not relevant;Not relevant;05.09.2023;05.09.2023;Not relevant;Not relevant;Not relevant;Debit;Some Paypal;-367,90;EUR;Not relevant;;Not relevant;;Not relevant;Not relevant

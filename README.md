@@ -62,18 +62,34 @@ The Syntax is as follows:
 
         <Category>;<Date>;<TransactionType>;<Description>;<Value>
 
-It is also possible to let the Bank Account Monitor plot a savings distribution of the incomings and debits of the account statement as pie chart.
+**Info:**
+The following feature is only available outside of the SDK.
+This is because the SDK does not provide any graphical user interface.
+If you want to use the feature you have to install the necessary python libraries which are listed in the [Dockerfile](./docker/Dockerfile).
+
+It is possible to let the Bank Account Monitor plot a distribution of the incomings and debits of the account statement as pie chart.
 We can achieve this by calling the Bank Account Monitor as follows:
 
         python3 ./bank_account_monitor_main.py \
         -t ./analyze/bank_account_statement_file \
         -r ./analyze/sort_rule_file \
         -o ./analyze/output_file
-        -s <title;category1;category2>
+        -s <"title;category1;category2">
 
 The *-o* parameter is optional in that case.
 The CSV string passed by the parameter *-s*, contains the title of the pie chart as well as a list of categories which shall be ignored.
-This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances. It is possible to pass only the title without ignore list.
+This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances.
+Passing only the title without ignore list also works.
+
+In the [examples](./examples/) directory there is a example for a sort_rule file,
+vrbank account statement and the corresponding sorted output as well as a pie chart,
+which are generated with the following command:
+
+        python3 bank_account_monitor_main.py \
+        -t ./examples/vr_bank_account_statement.csv \
+        -r ./examples/sort_rule.csv \
+        -o ./examples/sorted_output.csv  \
+        -s "savings;Fund"
 
 ## *Testing*
 
