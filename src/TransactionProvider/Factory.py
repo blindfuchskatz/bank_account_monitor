@@ -1,9 +1,9 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 from src.TransactionProvider.TransactionProvider import TransactionProvider
 
 
-class Factory:
+class Factory(ABC):
     @abstractmethod
     def get_transaction_provider(self, path: str) -> TransactionProvider:
-        pass
+        pass  # pragma: no cover

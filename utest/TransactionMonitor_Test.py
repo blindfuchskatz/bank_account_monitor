@@ -31,17 +31,17 @@ error_msg = "some error"
 class TransactionProviderStub(TransactionProvider):
 
     def get_transactions(self):
-        return
+        return  # pragma: no cover
 
 
 class SortRuleProviderStub(SortRuleProvider):
     def get_sort_rules(self):
-        return
+        return  # pragma: no cover
 
 
 class TransactionPresenterStub(TransactionPresenter):
     def present(self):
-        return
+        return  # pragma: no cover
 
 
 class ATransactionMonitor(unittest.TestCase):

@@ -8,7 +8,7 @@ class CustomAssert(unittest.TestCase):
     def assertRaisesWithMessage(self, msg, func, *args, **kwargs):
         try:
             func(*args, **kwargs)
-            self.assertFail()
+            self.assertFail()  # pragma: no cover
         except Exception as e:
             self.assertEqual(type(e), self.exceptionType)
             self.assertEqual(str(e), msg)

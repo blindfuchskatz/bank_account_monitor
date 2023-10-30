@@ -17,7 +17,7 @@ t_n9 = Transaction("d4", "t4", "d", -9)
 class PieChartStub(Plotter):
     def plot(self, title: str, data_dict: Dict):
         """Stub for testing"""
-        pass
+        pass  # pragma: no cover
 
 
 class ASavingsPresenter(unittest.TestCase):

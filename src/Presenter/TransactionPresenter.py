@@ -1,9 +1,9 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 from src.Sort.TransactionDict import TransactionDict
 
 
-class TransactionPresenter:
+class TransactionPresenter(ABC):
     @abstractmethod
     def present(self, transaction_dict: TransactionDict):
-        pass
+        pass  # pragma: no cover

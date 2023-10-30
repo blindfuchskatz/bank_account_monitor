@@ -1,7 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
-class SortRuleProvider:
+class SortRuleProvider(ABC):
     @abstractmethod
     def get_sort_rules(self):
-        pass
+        pass  # pragma: no cover
