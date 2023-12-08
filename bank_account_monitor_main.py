@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 from src.Logger import Logger
 from src.Presenter.PresenterFactory import PresenterFactory
+from src.Presenter.UiConfigTranslator import UiConfigTranslator
 from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
 from src.TransactionMonitor import TransactionMonitor
 from src.Sort.TransactionSorter import TransactionSorter
@@ -30,13 +31,17 @@ if __name__ == '__main__':
 
         tf = TransactionProviderFactory()
         pf = PresenterFactory()
+        presenterConfig = UiConfigTranslator()
+        presenterFactoryConfig = presenterConfig.translate(
+            arguments.csv_output_file, arguments.savings)
+
         trans_provider = tf.get_transaction_provider(
             arguments.transaction_path)
 
         sort_rule_provider = CsvSortRuleProvider(arguments.sort_rule_path)
         sorter = TransactionSorter()
 
-        presenter = pf.get(arguments.csv_output_file, arguments.savings)
+        presenter = pf.get(presenterFactoryConfig)
 
         monitor = TransactionMonitor(
             trans_provider, sort_rule_provider, sorter, presenter, logger)

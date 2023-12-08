@@ -3,10 +3,12 @@ from unittest.mock import MagicMock
 
 from src.Presenter.CsvPresenter import CsvPresenter
 from src.Presenter.MultiPresenter import MultiPresenter
+from src.Presenter.PieChart import PieChart
 from src.Presenter.PresenterException import PresenterException
 from src.Presenter.PresenterFactory import INVALID_INPUT, PRESENTER_FACTORY_ERROR, PresenterFactory
 from src.Presenter.PresenterFactoryException import PresenterFactoryException
 from src.Presenter.SavingsPresenter import SavingsPresenter
+from src.Presenter.PresenterFactoryConfig import PresenterFactoryConfig
 
 from utest.TestHelper import CustomAssert
 
@@ -31,51 +33,47 @@ class APresenterFactory(unittest.TestCase):
         SavingsPresenter.__init__ = self.savings_presenter_init
 
     def testReturnCsvPresenter(self):
-        p = self.f.get(SOME_PATH, "")
+        conf = PresenterFactoryConfig(csv_output_file=SOME_PATH)
+        p = self.f.get(conf)
 
         self.assertEqual(type(p), CsvPresenter)
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
 
     def testReturnSavingsPresenter(self):
-        plotter = self.f.get_plotter()
+        conf = PresenterFactoryConfig(title=TITLE, ignore_list=["fund"])
 
-        p = self.f.get("", TITLE)
-
-        self.assertEqual(type(p), SavingsPresenter)
-        SavingsPresenter.__init__.assert_called_with(TITLE,  plotter, [])
-
-    def testConsiderCategoryIgnoreListForSavingsPresenter(self):
-        plotter = self.f.get_plotter()
-
-        p = self.f.get("", "title;fund")
+        p = self.f.get(conf)
 
         self.assertEqual(type(p), SavingsPresenter)
-        SavingsPresenter.__init__.assert_called_with(TITLE,  plotter, ["fund"])
+        SavingsPresenter.__init__.assert_called_with(
+            TITLE,  conf.plotter, ["fund"])
 
     def testReturnMultiPresenter(self):
-        plotter = self.f.get_plotter()
+        conf = PresenterFactoryConfig(csv_output_file=SOME_PATH, title=TITLE)
 
-        p = self.f.get(SOME_PATH, TITLE)
+        p = self.f.get(conf)
 
         self.assertEqual(type(p), MultiPresenter)
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
-        SavingsPresenter.__init__.assert_called_with(TITLE,  plotter, [])
+        SavingsPresenter.__init__.assert_called_with(TITLE, conf.plotter, [])
 
     def testConsiderCategoryIgnoreListForMultiPresenter(self):
-        plotter = self.f.get_plotter()
-
-        p = self.f.get(SOME_PATH, "title;fund;bank")
+        conf = PresenterFactoryConfig(
+            csv_output_file=SOME_PATH, title=TITLE, ignore_list=["fund", "bank"])
+        p = self.f.get(conf)
 
         self.assertEqual(type(p), MultiPresenter)
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
         SavingsPresenter.__init__.assert_called_with(
-            TITLE,  plotter, ["fund", "bank"])
+            TITLE,  conf.plotter, ["fund", "bank"])
 
     def testRaiseExceptionWhenNoPresenterChosen(self):
+        conf = PresenterFactoryConfig()
         msg = PRESENTER_FACTORY_ERROR.format(INVALID_INPUT)
-        self.ca.assertRaisesWithMessage(msg, self.f.get, "", "")
+        self.ca.assertRaisesWithMessage(msg, self.f.get, conf)
 
     def testForwardPresenterExceptions(self):
+        conf = PresenterFactoryConfig(csv_output_file=SOME_PATH)
         CsvPresenter.__init__ = MagicMock(side_effect=PresenterException("e"))
         msg = PRESENTER_FACTORY_ERROR.format("e")
-        self.ca.assertRaisesWithMessage(msg, self.f.get, SOME_PATH, "")
+        self.ca.assertRaisesWithMessage(msg, self.f.get, conf)
