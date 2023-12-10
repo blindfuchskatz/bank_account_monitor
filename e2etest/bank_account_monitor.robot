@@ -2,6 +2,7 @@
 Library             OperatingSystem
 Library             Process
 Library             PdfCreator.py
+Library             ConfigFileCreator.py
 Variables           Varfile.py
 
 Test Setup          Create Directory    ${ANALYZE_DIR}
@@ -87,15 +88,13 @@ Some other file
 Bank account monitor is called
     [Arguments]    ${bank_statement_file}    ${sort_rule_file}    ${output_file}
 
+    ConfigFileCreator.Create    ${CONFIG_FILE_PATH}    ${bank_statement_file}    ${sort_rule_file}    ${output_file}
+
     Run Process
     ...    python3
     ...    /bank_account_monitor/bank_account_monitor_main.py
-    ...    -t
-    ...    ${bank_statement_file}
-    ...    -r
-    ...    ${sort_rule_file}
-    ...    -o
-    ...    ${output_file}
+    ...    -c
+    ...    ${CONFIG_FILE_PATH}
     ...    stdout=${STDOUT_FILE}
     ...    stderr=${STDERR_FILE}
 
@@ -110,10 +109,6 @@ Bank account monitor is called without bank statement
     Run Process
     ...    python3
     ...    /bank_account_monitor/bank_account_monitor_main.py
-    ...    -r
-    ...    ${SORT_RULE_FILE}
-    ...    -o
-    ...    ${CSV_OUTPUT_FILE}
     ...    stderr=${STDERR_FILE}
 
 A Csv file with sorted transactions where created
@@ -132,7 +127,7 @@ Help text appears
     Expect file have content    ${STDOUT_FILE}    ${HELP_TEXT}
 
 Hint to missing bank statement is appearing
-    Expect file have content    ${STDERR_FILE}    ${MISSING_BANK_STATEMENT}
+    Expect file have content    ${STDERR_FILE}    ${MISSING_CONFIG_FILE}
 
 Error is logged to standard err
     [Arguments]    ${exception_msg}

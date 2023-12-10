@@ -1,4 +1,5 @@
 ANALYZE_DIR = "/tmp/analyze/"
+CONFIG_FILE_PATH = ANALYZE_DIR + "config.txt"
 SKASSE_BANK_STATEMENT_FILE = ANALYZE_DIR + "skasse_statement_file.pdf"
 VR_BANK_STATEMENT_FILE = ANALYZE_DIR + "vr_bank_statement_file.csv"
 SORT_RULE_FILE = ANALYZE_DIR + "sort_rule.csv"
@@ -38,28 +39,17 @@ ALL_MISC_TRANSACTION_CSV = """misc;31.08.2023;Debit;"Leasing";-310.90
 misc;31.08.2023;Debit;"Allianz";-890.83
 misc;31.08.2023;Debit;"Food";-5.83"""
 EMPTY_MISC_CSV = "misc;"
-HELP_TEXT = """usage: bank_account_monitor_main.py [-h] -t TRANSACTION_PATH -r SORT_RULE_PATH
-                                    [-o CSV_OUTPUT_FILE] [-s SAVINGS] [-v]
+HELP_TEXT = """usage: bank_account_monitor_main.py [-h] -c CONFIG_PATH [-v]
 
 options:
   -h, --help            show this help message and exit
-  -t TRANSACTION_PATH, --transaction_path TRANSACTION_PATH
-                        path to a specific transaction file or a directory
-                        containing multiple transaction files
-  -r SORT_RULE_PATH, --sort_rule_path SORT_RULE_PATH
-                        path to sort rules
-  -o CSV_OUTPUT_FILE, --csv_output_file CSV_OUTPUT_FILE
-                        (optional) path to csv_output_file (including file
-                        name)
-  -s SAVINGS, --savings SAVINGS
-                        (optional) depict distribution of incomings and debits
-                        via pie chart
+  -c CONFIG_PATH, --config_path CONFIG_PATH
+                        path to config file
   -v, --version         show program's version number and exit
 """
 
-MISSING_BANK_STATEMENT = """usage: bank_account_monitor_main.py [-h] -t TRANSACTION_PATH -r SORT_RULE_PATH
-                                    [-o CSV_OUTPUT_FILE] [-s SAVINGS] [-v]
-bank_account_monitor_main.py: error: the following arguments are required: -t/--transaction_path
+MISSING_CONFIG_FILE = """usage: bank_account_monitor_main.py [-h] -c CONFIG_PATH [-v]
+bank_account_monitor_main.py: error: the following arguments are required: -c/--config_path
 """
 
 EXCEPTION_INVALID_BANK_STATEMENT = """Account statement file does not exist:</some/path.txt>

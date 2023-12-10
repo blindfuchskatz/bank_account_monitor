@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser
+from src.Configuration.ConfigParserWrapper import ConfigParserWrapper
+from src.Configuration.ConfigReader import ConfigReader
 from src.Logger import Logger
 from src.Presenter.PresenterFactory import PresenterFactory
-from src.Presenter.UiConfigTranslator import UiConfigTranslator
 from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
 from src.TransactionMonitor import TransactionMonitor
 from src.Sort.TransactionSorter import TransactionSorter
@@ -17,31 +18,28 @@ if __name__ == '__main__':
 
     try:
         parser = ArgumentParser()
-        parser.add_argument('-t', '--transaction_path',
-                            help='path to a specific transaction file or a directory containing multiple transaction files', required=True, action='store')
-        parser.add_argument('-r', '--sort_rule_path',
-                            help='path to sort rules', required=True, action='store')
-        parser.add_argument('-o', '--csv_output_file',
-                            help='(optional) path to csv_output_file (including file name)', default="",  action='store')
-        parser.add_argument('-s', '--savings', help='(optional) depict distribution of incomings and debits via pie chart',
-                            default="", action='store')
+        parser.add_argument('-c', '--config_path',
+                            help='path to config file', required=True, action='store')
         parser.add_argument('-v', '--version', action='version',
                             version='{version}'.format(version=__version__))
         arguments = parser.parse_args()
 
-        tf = TransactionProviderFactory()
-        pf = PresenterFactory()
-        presenterConfig = UiConfigTranslator()
-        presenterFactoryConfig = presenterConfig.translate(
-            arguments.csv_output_file, arguments.savings)
+        trans_prov_factory = TransactionProviderFactory()
+        pres_factory = PresenterFactory()
+        config_parser = ConfigParserWrapper()
+        config_reader = ConfigReader(config_parser)
 
-        trans_provider = tf.get_transaction_provider(
-            arguments.transaction_path)
+        config_reader.read(arguments.config_path)
 
-        sort_rule_provider = CsvSortRuleProvider(arguments.sort_rule_path)
+        trans_provider = trans_prov_factory.get_transaction_provider(
+            config_reader.get_account_statement_path())
+
+        sort_rule_provider = CsvSortRuleProvider(
+            config_reader.get_sort_rule_path())
+
+        presenter = pres_factory.get(config_reader.get_presenter_config())
+
         sorter = TransactionSorter()
-
-        presenter = pf.get(presenterFactoryConfig)
 
         monitor = TransactionMonitor(
             trans_provider, sort_rule_provider, sorter, presenter, logger)
