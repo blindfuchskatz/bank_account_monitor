@@ -79,8 +79,8 @@ file: '<string>', line: 1
 
 
 class ConfigParserStub(ConfigParserInterface):
-    def __init__(self,  config_as_str: str) -> None:
-        super().__init__()
+
+    def inject_config(self,  config_as_str: str) -> None:
         self.config_as_str = config_as_str
 
     def read(self, config_path: str) -> None:
@@ -97,112 +97,103 @@ class ConfigParserStub(ConfigParserInterface):
 
 
 class AConfigReader(unittest.TestCase):
+    def setUp(self) -> None:
+        self.parser = ConfigParserStub()
+        self.config_reader = ConfigReader(self.parser)
 
     def testReturnAccountStatementPath(self):
-        parser = ConfigParserStub(COMPLETE_CONFIG)
-        c = ConfigReader(parser)
+        self.parser.inject_config(COMPLETE_CONFIG)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_account_statement_path(),
+        self.assertEqual(self.config_reader.get_account_statement_path(),
                          "/account_statement/path")
 
     def testReturnSortRulePath(self):
-        parser = ConfigParserStub(COMPLETE_CONFIG)
-        c = ConfigReader(parser)
+        self.parser.inject_config(COMPLETE_CONFIG)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_sort_rule_path(),
+        self.assertEqual(self.config_reader.get_sort_rule_path(),
                          "/sort_rule/path")
 
     def testReturnCsvPresenterConfig(self):
-        expected_conf = PresenterConfig(
+        exp_c = PresenterConfig(
             csv_presenter_enable=True,
             csv_output_file="/csv_presenter/path",
             savings_presenter_enable=False,
             title="",
             ignore_list=[])
 
-        parser = ConfigParserStub(CONFIG_CSV_PRES)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_CSV_PRES)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_presenter_config(), expected_conf)
+        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
 
     def testReturnSavingsPresenterConfig(self):
-        expected_conf = PresenterConfig(
+        exp_c = PresenterConfig(
             csv_presenter_enable=False,
             csv_output_file="",
             savings_presenter_enable=True,
             title="savings",
             ignore_list=["fund", "bank"])
 
-        parser = ConfigParserStub(CONFIG_SAVE_PRES)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_SAVE_PRES)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_presenter_config(), expected_conf)
+        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
 
     def testReturnCompletePresenterConfig(self):
-        expected_conf = PresenterConfig(
+        exp_c = PresenterConfig(
             csv_presenter_enable=True,
             csv_output_file="/csv_presenter/path",
             savings_presenter_enable=False,
             title="savings",
             ignore_list=["fund", "bank"])
 
-        parser = ConfigParserStub(COMPLETE_CONFIG)
-        c = ConfigReader(parser)
+        self.parser.inject_config(COMPLETE_CONFIG)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_presenter_config(), expected_conf)
+        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
 
     def testEmptyStrWhenSectionMissing(self):
-        parser = ConfigParserStub(CONFIG_MISS_SEC_ACCOUNT_STMT)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_MISS_SEC_ACCOUNT_STMT)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_account_statement_path(), "")
+        self.assertEqual(self.config_reader.get_account_statement_path(), "")
 
     def testEmptyStrWhenOptionMissing(self):
-        parser = ConfigParserStub(CONFIG_MISS_OPTION_ACCOUNT_STMT)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_MISS_OPTION_ACCOUNT_STMT)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(c.get_account_statement_path(), "")
+        self.assertEqual(self.config_reader.get_account_statement_path(), "")
 
     def testFalseWhenBoolOptionMissing(self):
-        parser = ConfigParserStub(CONFIG_MISS_BOOL_OPTION)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_MISS_BOOL_OPTION)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        pres_config = c.get_presenter_config()
-
+        pres_config = self.config_reader.get_presenter_config()
         self.assertEqual(pres_config.csv_presenter_enable, False)
 
     def testEmptyListWhenListOptionMissing(self):
-        parser = ConfigParserStub(CONFIG_MISS_LIST_OPTION)
-        c = ConfigReader(parser)
+        self.parser.inject_config(CONFIG_MISS_LIST_OPTION)
 
-        c.read(NOT_FOR_TEST_RELEVANT_PATH)
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        pres_config = c.get_presenter_config()
-
+        pres_config = self.config_reader.get_presenter_config()
         self.assertEqual(pres_config.ignore_list, [])
 
     def testForwardConfigParserException(self):
-        parser = ConfigParserStub("hello")
-        c = ConfigReader(parser)
+        self.parser.inject_config("hello")
 
         try:
-            c.read(NOT_FOR_TEST_RELEVANT_PATH)
+            self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
         except ConfigReaderException as e:
             self.assertEqual(
