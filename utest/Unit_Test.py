@@ -12,6 +12,7 @@ from utest.File.FileReader_Test import AFileReader
 from utest.TransactionMonitor_Test import ATransactionMonitor
 from utest.Presenter.CsvPresenter_Test import ACsvPresenter
 from utest.Presenter.SavingsPresenter_Test import ASavingsPresenter
+from utest.Presenter.MultiPresenter_Test import AMultiPresenter
 from utest.Presenter.PresenterFactory_Test import APresenterFactory
 from utest.Configuration.ConfigReader_Test import AConfigReader
 if __name__ == '__main__':

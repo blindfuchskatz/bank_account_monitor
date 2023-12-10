@@ -18,15 +18,12 @@ class PresenterFactory:
                 return CsvPresenter(c.csv_output_file)
 
             elif c.savings_presenter_enable and not c.csv_presenter_enable:
-                return SavingsPresenter(c.title,
-                                        c.plotter,
-                                        c.ignore_list)
+                return SavingsPresenter(c.title, c.plotter, c.ignore_list)
 
             elif c.csv_presenter_enable and c.savings_presenter_enable:
-                return MultiPresenter(c.csv_output_file,
-                                      c.title,
-                                      c.plotter,
-                                      c.ignore_list)
+                pres_list = [CsvPresenter(c.csv_output_file),
+                             SavingsPresenter(c.title, c.plotter, c.ignore_list)]
+                return MultiPresenter(pres_list)
 
         except PresenterException as e:
             msg = PRESENTER_FACTORY_ERROR.format(str(e))
