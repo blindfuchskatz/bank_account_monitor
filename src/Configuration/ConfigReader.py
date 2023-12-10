@@ -33,11 +33,8 @@ class ConfigReader:
         save_p_ignore_list_str = self.config_parser.get(
             "savings_presenter", "ignore_categories")
 
-        if save_p_ignore_list_str:
-            save_p_ignore_list = [item.strip()
-                                  for item in save_p_ignore_list_str.split(',')]
-        else:
-            save_p_ignore_list = []
+        save_p_ignore_list = self.__convert_category_ignore_list(
+            save_p_ignore_list_str)
 
         config = PresenterConfig(csv_presenter_enable=csv_p_enable,
                                  csv_output_file=csv_p_path,
@@ -46,3 +43,9 @@ class ConfigReader:
                                  ignore_list=save_p_ignore_list)
 
         return config
+
+    def __convert_category_ignore_list(self, ignore_list_str):
+        if ignore_list_str:
+            return [item.strip() for item in ignore_list_str.split(',')]
+        else:
+            return []
