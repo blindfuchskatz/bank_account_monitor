@@ -4,12 +4,12 @@ from abc import ABC, abstractmethod
 class ConfigParserInterface(ABC):
     @abstractmethod
     def read(self, config_path: str) -> None:
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def get(self, section: str, option: str) -> str:
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def getboolean(self, section: str, option: str) -> bool:
-        pass
+        pass  # pragma: no cover
