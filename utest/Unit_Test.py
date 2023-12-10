@@ -14,5 +14,6 @@ from utest.Presenter.CsvPresenter_Test import ACsvPresenter
 from utest.Presenter.SavingsPresenter_Test import ASavingsPresenter
 from utest.Presenter.PresenterFactory_Test import APresenterFactory
 from utest.Presenter.UiConfigTranslator_Test import AUiConfigTranslator
+from utest.Configuration.ConfigReader_Test import AConfigReader
 if __name__ == '__main__':
     unittest.main()
