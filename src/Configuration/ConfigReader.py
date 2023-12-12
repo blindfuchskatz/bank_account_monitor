@@ -1,5 +1,6 @@
+from typing import Dict
 from src.Configuration.ConfigReaderException import ConfigReaderException
-from src.Configuration.PresenterConfig import PresenterConfig
+from src.Configuration.PresenterConfig import CvePresConfig, PresConf, PresenterId, SavingsPresConfig
 from src.Configuration.ConfigParserInterface import ConfigParserInterface
 
 CONFIG_READER_ERROR = "Config file syntax error|what:{}"
@@ -15,34 +16,45 @@ class ConfigReader:
         except Exception as e:
             raise ConfigReaderException(CONFIG_READER_ERROR.format(str(e)))
 
-    def get_account_statement_path(self) -> str:
+    def get_account_stmt_path(self) -> str:
         return self.config_parser.get("account_statement", "input_path")
 
     def get_sort_rule_path(self) -> str:
         return self.config_parser.get("sort_rule", "input_path")
 
-    def get_presenter_config(self) -> PresenterConfig:
-        csv_p_enable = self.config_parser.getboolean("csv_presenter", "enable")
+    def get_presenter_config(self) -> Dict[PresenterId, PresConf]:
+        pres_conf_dict: Dict[PresenterId, PresConf] = {}
+        pres_conf_dict = self.__get_cve_pres_conf(pres_conf_dict)
+        pres_conf_dict = self.__get_save_pres_conf(pres_conf_dict)
+
+        return pres_conf_dict
+
+    def __get_cve_pres_conf(self, conf_dict):
+        enable = self.config_parser.getboolean("csv_presenter", "enable")
         csv_p_path = self.config_parser.get("csv_presenter", "output_path")
 
-        save_p_enable = self.config_parser.getboolean(
-            "savings_presenter", "enable")
+        if not enable:
+            return conf_dict
 
-        save_p_title = self.config_parser.get("savings_presenter", "title")
+        conf_dict[PresenterId.cve] = CvePresConfig(csv_output_file=csv_p_path)
 
-        save_p_ignore_list_str = self.config_parser.get(
-            "savings_presenter", "ignore_categories")
+        return conf_dict
 
-        save_p_ignore_list = self.__convert_category_ignore_list(
-            save_p_ignore_list_str)
+    def __get_save_pres_conf(self, conf_dict):
+        enable = self.config_parser.getboolean("savings_presenter", "enable")
+        title = self.config_parser.get("savings_presenter", "title")
+        il = self.config_parser.get("savings_presenter", "ignore_categories")
 
-        config = PresenterConfig(csv_presenter_enable=csv_p_enable,
-                                 csv_output_file=csv_p_path,
-                                 savings_presenter_enable=save_p_enable,
-                                 title=save_p_title,
-                                 ignore_list=save_p_ignore_list)
+        ignore_list = self.__convert_category_ignore_list(il)
 
-        return config
+        if not enable:
+            return conf_dict
+
+        pres = SavingsPresConfig(title=title, ignore_list=ignore_list)
+
+        conf_dict[PresenterId.savings] = pres
+
+        return conf_dict
 
     def __convert_category_ignore_list(self, ignore_list_str):
         if ignore_list_str:

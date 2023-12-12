@@ -32,7 +32,7 @@ if __name__ == '__main__':
         config_reader.read(arguments.config_path)
 
         trans_provider = trans_prov_factory.get_transaction_provider(
-            config_reader.get_account_statement_path())
+            config_reader.get_account_stmt_path())
 
         sort_rule_provider = CsvSortRuleProvider(
             config_reader.get_sort_rule_path())

@@ -2,7 +2,7 @@ import configparser
 import unittest
 from src.Configuration.ConfigReader import CONFIG_READER_ERROR, ConfigReader
 from src.Configuration.ConfigReaderException import ConfigReaderException
-from src.Configuration.PresenterConfig import PresenterConfig
+from src.Configuration.PresenterConfig import CvePresConfig, PresenterId, SavingsPresConfig
 from src.Configuration.ConfigParserInterface import ConfigParserInterface
 
 
@@ -10,22 +10,22 @@ NOT_FOR_TEST_RELEVANT_PATH = "/some/path"
 
 CONFIG_CSV_PRES = """
 [account_statement]
-input_path = /account_statement/path
+input_path = /a/b/c
 
 [sort_rule]
-input_path = /sort_rule/path
+input_path = /sr/p
 
 [csv_presenter]
 enable = true
-output_path = /csv_presenter/path
+output_path = /csv_p/path
 """
 
 CONFIG_SAVE_PRES = """
 [account_statement]
-input_path = /account_statement/path
+input_path = /a/b/c
 
 [sort_rule]
-input_path = /sort_rule/path
+input_path = /sr/p
 
 [savings_presenter]
 enable = true
@@ -35,41 +35,69 @@ ignore_categories = fund, bank
 
 COMPLETE_CONFIG = """
 [account_statement]
-input_path = /account_statement/path
+input_path = /a/b/c
 
 [sort_rule]
-input_path = /sort_rule/path
+input_path = /sr/p
 
 [csv_presenter]
 enable = true
-output_path = /csv_presenter/path
+output_path = /csv_p/path
 
 [savings_presenter]
-enable = false
+enable = true
 title = savings
 ignore_categories = fund, bank
 """
 
+COMPLETE_DEFAULT_CONFIG = """
+[account_statement]
+
+[sort_rule]
+
+[csv_presenter]
+enable = true
+
+[savings_presenter]
+enable = true
+"""
+
 CONFIG_MISS_SEC_ACCOUNT_STMT = """
 [sort_rule]
-input_path = /sort_rule/path
+input_path = /sr/p
 """
 
 CONFIG_MISS_OPTION_ACCOUNT_STMT = """
 [account_statement]
 
 [sort_rule]
-input_path = /sort_rule/path
+input_path = /sr/p
 """
 
-CONFIG_MISS_BOOL_OPTION = """
+CONFIG_DISABLE_CSV_PRES = """
 [csv_presenter]
-output_path = /csv_presenter/paths
+enable = false
+output_path = /csv_p/path
+"""
+
+CONFIG_MISS_CVE_PRES_FLAG = """
+[csv_presenter]
+output_path = /csv_p/path
 """
 
 CONFIG_MISS_LIST_OPTION = """
 [savings_presenter]
+enable = true
+title = savings
+"""
+
+CONFIG_DISABLE_SAVINGS_PRES = """
+[savings_presenter]
 enable = false
+"""
+
+CONFIG_MISS_SAVINGS_PRES_FLAG = """
+[savings_presenter]
 title = savings
 """
 
@@ -106,88 +134,81 @@ class AConfigReader(unittest.TestCase):
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_account_statement_path(),
-                         "/account_statement/path")
+        self.assertEqual(self.config_reader.get_account_stmt_path(), "/a/b/c")
 
     def testReturnSortRulePath(self):
         self.parser.inject_config(COMPLETE_CONFIG)
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_sort_rule_path(),
-                         "/sort_rule/path")
+        self.assertEqual(self.config_reader.get_sort_rule_path(), "/sr/p")
 
     def testReturnCsvPresenterConfig(self):
-        exp_c = PresenterConfig(
-            csv_presenter_enable=True,
-            csv_output_file="/csv_presenter/path",
-            savings_presenter_enable=False,
-            title="",
-            ignore_list=[])
-
+        exp_c = {PresenterId.cve: CvePresConfig(csv_output_file="/csv_p/path")}
         self.parser.inject_config(CONFIG_CSV_PRES)
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
+        self.assertDictEqual(self.config_reader.get_presenter_config(), exp_c)
+
+    def testReturnNoCsvPresenterWhenDisabled(self):
+        self.parser.inject_config(CONFIG_DISABLE_CSV_PRES)
+
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
+
+        self.assertDictEqual(self.config_reader.get_presenter_config(), {})
+
+    def testReturnNoCsvPresenterWhenEnableFlagMissing(self):
+        self.parser.inject_config(CONFIG_MISS_CVE_PRES_FLAG)
+
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
+
+        self.assertDictEqual(self.config_reader.get_presenter_config(), {})
 
     def testReturnSavingsPresenterConfig(self):
-        exp_c = PresenterConfig(
-            csv_presenter_enable=False,
-            csv_output_file="",
-            savings_presenter_enable=True,
-            title="savings",
-            ignore_list=["fund", "bank"])
-
+        pres = SavingsPresConfig(title="savings", ignore_list=["fund", "bank"])
+        exp_c = {PresenterId.savings: pres}
         self.parser.inject_config(CONFIG_SAVE_PRES)
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
+        self.assertDictEqual(self.config_reader.get_presenter_config(), exp_c)
+
+    def testReturnNoSavingsPresenterWhenDisabled(self):
+        self.parser.inject_config(CONFIG_DISABLE_SAVINGS_PRES)
+
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
+
+        self.assertDictEqual(self.config_reader.get_presenter_config(), {})
+
+    def testReturnNoSavingsPresenterWhenEnableFlagMissing(self):
+        self.parser.inject_config(CONFIG_MISS_SAVINGS_PRES_FLAG)
+
+        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
+
+        self.assertDictEqual(self.config_reader.get_presenter_config(), {})
 
     def testReturnCompletePresenterConfig(self):
-        exp_c = PresenterConfig(
-            csv_presenter_enable=True,
-            csv_output_file="/csv_presenter/path",
-            savings_presenter_enable=False,
-            title="savings",
-            ignore_list=["fund", "bank"])
-
+        cp = CvePresConfig(csv_output_file="/csv_p/path")
+        sp = SavingsPresConfig(title="savings", ignore_list=["fund", "bank"])
+        exp_c = {PresenterId.cve: cp, PresenterId.savings: sp}
         self.parser.inject_config(COMPLETE_CONFIG)
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_presenter_config(), exp_c)
+        self.assertDictEqual(self.config_reader.get_presenter_config(), exp_c)
 
-    def testEmptyStrWhenSectionMissing(self):
-        self.parser.inject_config(CONFIG_MISS_SEC_ACCOUNT_STMT)
-
-        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
-
-        self.assertEqual(self.config_reader.get_account_statement_path(), "")
-
-    def testEmptyStrWhenOptionMissing(self):
-        self.parser.inject_config(CONFIG_MISS_OPTION_ACCOUNT_STMT)
+    def testReturnCompleteWithDefaultValues(self):
+        cve_pres = CvePresConfig(csv_output_file="")
+        save_pres = SavingsPresConfig(title="", ignore_list=[])
+        exp_c = {PresenterId.cve: cve_pres, PresenterId.savings: save_pres}
+        self.parser.inject_config(COMPLETE_DEFAULT_CONFIG)
 
         self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
 
-        self.assertEqual(self.config_reader.get_account_statement_path(), "")
-
-    def testFalseWhenBoolOptionMissing(self):
-        self.parser.inject_config(CONFIG_MISS_BOOL_OPTION)
-
-        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
-
-        pres_config = self.config_reader.get_presenter_config()
-        self.assertEqual(pres_config.csv_presenter_enable, False)
-
-    def testEmptyListWhenListOptionMissing(self):
-        self.parser.inject_config(CONFIG_MISS_LIST_OPTION)
-
-        self.config_reader.read(NOT_FOR_TEST_RELEVANT_PATH)
-
-        pres_config = self.config_reader.get_presenter_config()
-        self.assertEqual(pres_config.ignore_list, [])
+        self.assertEqual(self.config_reader.get_account_stmt_path(), "")
+        self.assertEqual(self.config_reader.get_sort_rule_path(), "")
+        self.assertDictEqual(self.config_reader.get_presenter_config(), exp_c)
 
     def testForwardConfigParserException(self):
         self.parser.inject_config("hello")

@@ -1,7 +1,4 @@
 from typing import List
-from src.Presenter.CsvPresenter import CsvPresenter
-from src.Presenter.Plotter import Plotter
-from src.Presenter.SavingsPresenter import SavingsPresenter
 from src.Presenter.TransactionPresenter import TransactionPresenter
 from src.Sort.TransactionDict import TransactionDict
 
