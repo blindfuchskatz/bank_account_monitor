@@ -32,12 +32,12 @@ class PresenterFactory:
         raise PresenterFactoryException(msg)
 
     def __create_cve_pres(self, conf: PresConf) -> CsvPresenter:
-        c: CvePresConfig = cast(CvePresConfig, conf)
-        return CsvPresenter(c.csv_output_file)
+        cve_conf: CvePresConfig = cast(CvePresConfig, conf)
+        return CsvPresenter(cve_conf.csv_output_file)
 
     def __create_savings_pres(self, conf: PresConf) -> SavingsPresenter:
-        c: SavingsPresConfig = cast(SavingsPresConfig, conf)
-        return SavingsPresenter(c.title, c.plotter, c.ignore_list)
+        save_conf: SavingsPresConfig = cast(SavingsPresConfig, conf)
+        return SavingsPresenter(save_conf)
 
     def __create_multi_pres(self, c_dict: Dict[PresenterId, PresConf]) -> MultiPresenter:
         pres_list = []

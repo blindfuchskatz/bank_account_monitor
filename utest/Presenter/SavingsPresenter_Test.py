@@ -2,6 +2,7 @@ from typing import Dict
 import unittest
 
 from unittest.mock import MagicMock
+from src.Configuration.PresenterConfig import SavingsPresConfig
 from src.Presenter.Plotter import Plotter
 from src.Presenter.SavingsPresenter import SavingsPresenter
 
@@ -24,7 +25,11 @@ class ASavingsPresenter(unittest.TestCase):
     def setUp(self) -> None:
         self.pie_chart = PieChartStub()
         self.pie_chart.plot = MagicMock()
-        self.p = SavingsPresenter("title", self.pie_chart, [])
+        self.expect_conf = SavingsPresConfig(plotter=self.pie_chart,
+                                             title="title",
+                                             ignore_list=[])
+
+        self.p = SavingsPresenter(self.expect_conf)
 
     def testCalcSavings(self):
         t_dict = {"misc": [t_n1, t_p2],
@@ -54,7 +59,11 @@ class ASavingsPresenter(unittest.TestCase):
                   "gold": [t_n1],
                   "salary": [t_p10]}
 
-        p = SavingsPresenter("title", self.pie_chart, ["funds", "gold"])
+        config = SavingsPresConfig(plotter=self.pie_chart,
+                                   title="title",
+                                   ignore_list=["funds", "gold"])
+
+        p = SavingsPresenter(config)
 
         p.present(t_dict)
 
@@ -64,9 +73,7 @@ class ASavingsPresenter(unittest.TestCase):
     def testCalcOnlyLosings(self):
         t_dict = {"misc": [t_n1, t_n3]}
 
-        p = SavingsPresenter("title", self.pie_chart, [])
-
-        p.present(t_dict)
+        self.p.present(t_dict)
 
         plot_dict = {'Losings': 4, 'misc': 4}
         self.pie_chart.plot.assert_called_once_with("title", plot_dict)

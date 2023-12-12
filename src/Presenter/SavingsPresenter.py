@@ -1,4 +1,5 @@
 from typing import List
+from src.Configuration.PresenterConfig import SavingsPresConfig
 from src.Presenter.Plotter import Plotter
 from src.Presenter.TransactionPresenter import TransactionPresenter
 
@@ -7,10 +8,10 @@ from src.TransactionProvider.Transaction import Transaction
 
 
 class SavingsPresenter(TransactionPresenter):
-    def __init__(self, title: str, plotter: Plotter, ignore_list: list[str]) -> None:
-        self.__plotter = plotter
-        self.__title = title
-        self.__ignore_list = ignore_list
+    def __init__(self, conf: SavingsPresConfig) -> None:
+        self.__plotter = conf.plotter
+        self.__title = conf.title
+        self.__ignore_list = conf.ignore_list
 
     def present(self, transaction_dict: TransactionDict) -> None:
 

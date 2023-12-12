@@ -40,14 +40,13 @@ class APresenterFactory(unittest.TestCase):
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
 
     def testReturnSavingsPresenter(self):
-        pres_conf = SavingsPresConfig(title=TITLE, ignore_list=["fund"])
-        conf = {PresenterId.savings: pres_conf}
+        save_conf = SavingsPresConfig(title=TITLE, ignore_list=["fund"])
+        conf = {PresenterId.savings: save_conf}
 
         p = self.f.get(conf)
 
-        plotter = conf[PresenterId.savings].plotter
         self.assertEqual(type(p), SavingsPresenter)
-        SavingsPresenter.__init__.assert_called_with(TITLE, plotter, ["fund"])
+        SavingsPresenter.__init__.assert_called_with(save_conf)
 
     def testReturnMultiPresenter(self):
         cve_conf = CvePresConfig(csv_output_file=SOME_PATH)
@@ -56,10 +55,9 @@ class APresenterFactory(unittest.TestCase):
 
         p = self.f.get(conf)
 
-        plotter = conf[PresenterId.savings].plotter
         self.assertEqual(type(p), MultiPresenter)
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
-        SavingsPresenter.__init__.assert_called_with(TITLE, plotter, [])
+        SavingsPresenter.__init__.assert_called_with(save_conf)
 
     def testConsiderCategoryIgnoreListForMultiPresenter(self):
         c_conf = CvePresConfig(csv_output_file=SOME_PATH)
@@ -68,11 +66,9 @@ class APresenterFactory(unittest.TestCase):
 
         p = self.f.get(conf)
 
-        plotter = conf[PresenterId.savings].plotter
         self.assertEqual(type(p), MultiPresenter)
         CsvPresenter.__init__.assert_called_with(SOME_PATH)
-        SavingsPresenter.__init__.assert_called_with(
-            TITLE,  plotter, ["fund", "bank"])
+        SavingsPresenter.__init__.assert_called_with(s_conf)
 
     def testRaiseExceptionWhenNoPresenterChosen(self):
         conf = {}
