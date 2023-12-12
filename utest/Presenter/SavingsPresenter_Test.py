@@ -25,11 +25,11 @@ class ASavingsPresenter(unittest.TestCase):
     def setUp(self) -> None:
         self.pie_chart = PieChartStub()
         self.pie_chart.plot = MagicMock()
-        self.expect_conf = SavingsPresConfig(plotter=self.pie_chart,
-                                             title="title",
-                                             ignore_list=[])
+        self.conf = SavingsPresConfig(plotter=self.pie_chart,
+                                      title="title",
+                                      ignore_list=[])
 
-        self.p = SavingsPresenter(self.expect_conf)
+        self.p = SavingsPresenter(self.conf)
 
     def testCalcSavings(self):
         t_dict = {"misc": [t_n1, t_p2],

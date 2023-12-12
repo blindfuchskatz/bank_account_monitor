@@ -32,12 +32,13 @@ class APresenterFactory(unittest.TestCase):
         SavingsPresenter.__init__ = self.savings_presenter_init
 
     def testReturnCsvPresenter(self):
-        conf = {PresenterId.cve: CvePresConfig(csv_output_file=SOME_PATH)}
+        cve_pres_conf = CvePresConfig(csv_output_file=SOME_PATH)
+        conf = {PresenterId.cve: cve_pres_conf}
 
         p = self.f.get(conf)
 
         self.assertEqual(type(p), CsvPresenter)
-        CsvPresenter.__init__.assert_called_with(SOME_PATH)
+        CsvPresenter.__init__.assert_called_with(cve_pres_conf)
 
     def testReturnSavingsPresenter(self):
         save_conf = SavingsPresConfig(title=TITLE, ignore_list=["fund"])
@@ -56,7 +57,7 @@ class APresenterFactory(unittest.TestCase):
         p = self.f.get(conf)
 
         self.assertEqual(type(p), MultiPresenter)
-        CsvPresenter.__init__.assert_called_with(SOME_PATH)
+        CsvPresenter.__init__.assert_called_with(cve_conf)
         SavingsPresenter.__init__.assert_called_with(save_conf)
 
     def testConsiderCategoryIgnoreListForMultiPresenter(self):
@@ -67,7 +68,7 @@ class APresenterFactory(unittest.TestCase):
         p = self.f.get(conf)
 
         self.assertEqual(type(p), MultiPresenter)
-        CsvPresenter.__init__.assert_called_with(SOME_PATH)
+        CsvPresenter.__init__.assert_called_with(c_conf)
         SavingsPresenter.__init__.assert_called_with(s_conf)
 
     def testRaiseExceptionWhenNoPresenterChosen(self):

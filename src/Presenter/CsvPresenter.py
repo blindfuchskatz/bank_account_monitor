@@ -1,3 +1,4 @@
+from src.Configuration.PresenterConfig import CvePresConfig
 from src.File.FileChecker import FileChecker
 from src.File.FileWriter import FileWriter
 from src.Presenter.PresenterException import PresenterException
@@ -9,8 +10,8 @@ NO_PATH = "Cve presenter error|no input path"
 
 
 class CsvPresenter(TransactionPresenter):
-    def __init__(self, input_path: str) -> None:
-        self.__path = input_path
+    def __init__(self, conf: CvePresConfig) -> None:
+        self.__path = conf.csv_output_file
 
         if not self.__path:
             raise PresenterException(NO_PATH)

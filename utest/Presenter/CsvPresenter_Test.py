@@ -1,6 +1,7 @@
 import unittest
 
 from unittest.mock import MagicMock
+from src.Configuration.PresenterConfig import CvePresConfig
 from src.Presenter.CsvPresenter import INVALID_INPUT_PATH, NO_PATH, CsvPresenter
 from src.File.FileChecker import FileChecker
 from src.File.FileWriter import FileWriter
@@ -24,7 +25,8 @@ class ACsvPresenter(unittest.TestCase):
         FileWriter.write = MagicMock()
         self.ca = CustomAssert()
         self.ca.setExceptionType(PresenterException)
-        self.cp = CsvPresenter(SOME_PATH)
+        self.conf = CvePresConfig(csv_output_file=SOME_PATH)
+        self.cp = CsvPresenter(self.conf)
 
     def tearDown(self) -> None:
         FileChecker.dir_of_file_exists = self.dir_of_file_exists
@@ -56,9 +58,9 @@ class ACsvPresenter(unittest.TestCase):
 
     def testRaiseExceptionWhenOutputPathIsMissing(self):
         self.ca.assertRaisesWithMessage(
-            NO_PATH, CsvPresenter, "")
+            NO_PATH, CsvPresenter, CvePresConfig())
 
     def testRaiseExceptionWhenOutputPathIsInvalid(self):
         FileChecker.dir_of_file_exists = MagicMock(return_value=False)
         self.ca.assertRaisesWithMessage(
-            INVALID_INPUT_PATH.format(SOME_PATH), CsvPresenter, SOME_PATH)
+            INVALID_INPUT_PATH.format(SOME_PATH), CsvPresenter, self.conf)

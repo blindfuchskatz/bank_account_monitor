@@ -33,7 +33,7 @@ class PresenterFactory:
 
     def __create_cve_pres(self, conf: PresConf) -> CsvPresenter:
         cve_conf: CvePresConfig = cast(CvePresConfig, conf)
-        return CsvPresenter(cve_conf.csv_output_file)
+        return CsvPresenter(cve_conf)
 
     def __create_savings_pres(self, conf: PresConf) -> SavingsPresenter:
         save_conf: SavingsPresConfig = cast(SavingsPresConfig, conf)
