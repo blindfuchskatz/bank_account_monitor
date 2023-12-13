@@ -1,0 +1,15 @@
+[account_statement]
+input_path = ./examples/vr_bank_account_statement.csv
+
+[sort_rule]
+input_path = ./examples/sort_rule.csv
+
+[csv_presenter]
+enable = true
+output_path = ./examples/sorted_output.csv
+
+[savings_presenter]
+enable = true
+output_path = ./examples/savings_pie_chart.png
+title = savings
+ignore_categories = savings, Fund

@@ -9,7 +9,7 @@ The maturity level or release notes are visible via the release Git tags.
 The easiest, but not resource-saving way to use the Bank Account Monitor is via the *bank_account_monitor_sdk*.
 All dependencies are included in the *bank_account_monitor_sdk*. See also into the [Dockerfile](./docker/Dockerfile).
 If you don't want the overhead caused by the SDK, feel free to create your own Python environment.
-All commands below have been tested only in an Ubuntu 22.04 environment with Rootless Docker installed
+All commands below have been tested only in an Ubuntu 22.04 environment.
 
 ### *Building bank_account_monitor_sdk*
 
@@ -25,8 +25,15 @@ Enter the project root directory and execute the following command. This will st
 
 ### *Execute Bank Account Monitor*
 
-First, you need to place a bank statement file in the [analyze](./analyze/) directory.
-Next, you need to create a sorting rules file and also place it in the [analyze](./analyze/) directory.
+To execute the Bank Account Monitor we need the to place the following files in the [analyze](./analyze/) directory.
+
+1. bank account statement file
+2. sort rule file
+3. configuration file
+
+It is assumed that the bank account statement file is provided by the user. Check the release notes in the git tags which banks are supported.
+
+The following section describe how to create the sort rule and configuration file.
 
 #### Creating a sort rule file
 
@@ -50,47 +57,56 @@ Transactions that cannot be assigned to a category are sorted into the *misc* ca
 If no sorting rule matches a transaction description, all transactions are assigned to the *misc* category.
 This also happens if you pass an empty file to the Bank Account Monitor as a sorting rule file.
 
-If the account statement and the sorting rule file are available, the Bank Account Monitor can be started in the SDK as follows:
+#### Creating a configuration file
 
-        python3 ./bank_account_monitor_main.py \
-        -t ./analyze/bank_account_statement_file \
-        -r ./analyze/sort_rule_file \
-        -o ./analyze/output_file
+All Bank Account Monitor configuration options are
+explained in the table below.
 
-The output file contain the sorted transactions in a CSV syntax.
-The Syntax is as follows:
+
+| Section| Option | Description| Mandatory|
+| -------- | -------- | -------- | -------- |
+| account_statement | input_path | file or directory path where the bank account statements are stored| True
+|sort_rule| input_path | path to the sort rule file | True|
+|csv_presenter| enable |enablement of the transaction sorting into a csv file. Values are true or false. If entry is missing, the default value is false| False (Either csv_presenter or saving_presenter must be active, otherwise Bank Account Monitor abort execution)|
+|csv_presenter| output_path| output path where the csv file should be stored| True in case csv_presenter is enabled, otherwise False|
+|savings_presenter| enable | enablement of the savings calculation. Values are true ore false. If entry is missing, the default value is false| False (Either csv_presenter or saving_presenter must be active, otherwise Bank Account Monitor abort execution)|
+|savings_presenter| output_path | output path where the savings calculation as PNG image is stored. The image contains a distribution of the incomings and debits of the account statement as pie chart|True in case savings_presenter is enabled, otherwise False|
+|savings_presenter|title|title of the pie chart. Is printed in the image|False|
+|savings_presenter|ignore_categories| comma separated list of categories which should be ignored during the savings calculation. This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances|False|
+
+
+
+The configuration file have the following syntax:
+
+        [account_statement]
+        input_path = <file or directory path>
+
+        [sort_rule]
+        input_path = <file path>
+
+        [csv_presenter]
+        enable = <true/false>
+        output_path = <file path>
+
+        [savings_presenter]
+        enable = <true/false>
+        output_path = <file path>
+        title = <string>
+        ignore_categories = <cat1, cat2, cat3>
+
+The output of the csv_presenter have the following syntax:
 
         <Category>;<Date>;<TransactionType>;<Description>;<Value>
 
-**Info:**
-The following feature is only available outside of the SDK.
-This is because the SDK does not provide any graphical user interface.
-If you want to use the feature you have to install the necessary python libraries which are listed in the [Dockerfile](./docker/Dockerfile).
+If the account statement file, the sorting rule file and the configuration file are available, the Bank Account Monitor can be started in the SDK as follows:
 
-It is possible to let the Bank Account Monitor plot a distribution of the incomings and debits of the account statement as pie chart.
-We can achieve this by calling the Bank Account Monitor as follows:
+        python3 ./bank_account_monitor_main.py -c ./analyze/config.txt
 
-        python3 ./bank_account_monitor_main.py \
-        -t ./analyze/bank_account_statement_file \
-        -r ./analyze/sort_rule_file \
-        -o ./analyze/output_file
-        -s <"title;category1;category2">
-
-The *-o* parameter is optional in that case.
-The CSV string passed by the parameter *-s*, contains the title of the pie chart as well as a list of categories which shall be ignored.
-This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances.
-Passing only the title without ignore list also works.
 
 In the [examples](./examples/) directory there is a example for a sort_rule file,
-vrbank account statement and the corresponding sorted output as well as a pie chart,
-which are generated with the following command:
+vrbank account statement, configuration file and the corresponding sorted output as well as the savings pie chart, which are generated with the following command:
 
-        python3 bank_account_monitor_main.py \
-        -t ./examples/vr_bank_account_statement.csv \
-        -r ./examples/sort_rule.csv \
-        -o ./examples/sorted_output.csv  \
-        -s "savings;Fund"
-
+        python3 ./bank_account_monitor_main.py -c ./examples/config.txt
 ## *Testing*
 
 The overall project is developed in a test-driven approach. If you want to extend the project with your own written transaction provider for a specific bank, you can use the unit and end-to-end tests of this project.
