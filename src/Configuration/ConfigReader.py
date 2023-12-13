@@ -42,6 +42,7 @@ class ConfigReader:
 
     def __get_save_pres_conf(self, conf_dict):
         enable = self.config_parser.getboolean("savings_presenter", "enable")
+        plot_path = self.config_parser.get("savings_presenter", "output_path")
         title = self.config_parser.get("savings_presenter", "title")
         il = self.config_parser.get("savings_presenter", "ignore_categories")
 
@@ -50,7 +51,9 @@ class ConfigReader:
         if not enable:
             return conf_dict
 
-        pres = SavingsPresConfig(title=title, ignore_list=ignore_list)
+        pres = SavingsPresConfig(plot_output_file=plot_path,
+                                 title=title,
+                                 ignore_list=ignore_list)
 
         conf_dict[PresenterId.savings] = pres
 

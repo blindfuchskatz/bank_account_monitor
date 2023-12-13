@@ -23,5 +23,6 @@ class CvePresConfig(PresConf):
 @dataclass
 class SavingsPresConfig(PresConf):
     plotter: Plotter = PieChart()
+    plot_output_file: str = ""
     title: str = ""
     ignore_list: List[str] = field(default_factory=list)

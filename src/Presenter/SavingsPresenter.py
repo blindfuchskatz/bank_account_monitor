@@ -10,6 +10,7 @@ from src.TransactionProvider.Transaction import Transaction
 class SavingsPresenter(TransactionPresenter):
     def __init__(self, conf: SavingsPresConfig) -> None:
         self.__plotter = conf.plotter
+        self.__path = conf.plot_output_file
         self.__title = conf.title
         self.__ignore_list = conf.ignore_list
 
@@ -27,7 +28,7 @@ class SavingsPresenter(TransactionPresenter):
             value = self.__calc_sum(transaction_list)
             plot_dict[category] = abs(value)
 
-        self.__plotter.plot(self.__title, plot_dict)
+        self.__plotter.plot(self.__title, plot_dict, self.__path)
 
     def __remove_ignored_categories(self, transaction_dict: TransactionDict):
         cleaned_dict = {}

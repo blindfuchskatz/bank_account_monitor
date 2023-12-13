@@ -5,7 +5,7 @@ from src.Presenter.Plotter import Plotter
 
 
 class PieChart(Plotter):
-    def plot(self, title: str, data_dict: Dict[str, int]) -> None:
+    def plot(self, title: str, data_dict: Dict[str, int], path: str) -> None:
 
         labels = list(data_dict.keys())
         sizes = list(data_dict.values())
@@ -15,4 +15,4 @@ class PieChart(Plotter):
                 autopct=lambda p: f'{p * sum(sizes) / 10000:.2f}', startangle=90)
         plt.axis('equal')
         plt.title(title)
-        plt.show()
+        plt.savefig(path)

@@ -2,8 +2,14 @@ ANALYZE_DIR = "/tmp/analyze/"
 CONFIG_FILE_PATH = ANALYZE_DIR + "config.txt"
 SKASSE_BANK_STATEMENT_FILE = ANALYZE_DIR + "skasse_statement_file.pdf"
 VR_BANK_STATEMENT_FILE = ANALYZE_DIR + "vr_bank_statement_file.csv"
+VR_BANK_STATEMENT_FILE_WITH_SALARY = ANALYZE_DIR + "vr_bank_stmt_salary_file.csv"
 SORT_RULE_FILE = ANALYZE_DIR + "sort_rule.csv"
 CSV_OUTPUT_FILE = ANALYZE_DIR + "sorted_transactions.csv"
+SAVINGS_OUTPUT_FILE = ANALYZE_DIR + "savings.png"
+LOSIGNS_OUTPUT_FILE = ANALYZE_DIR + "losings.png"
+SAVINGS_PNG = "/bank_account_monitor/e2etest/test_files/sample_savings.png"
+LOSINGS_PNG = "/bank_account_monitor/e2etest/test_files/sample_losings.png"
+
 STDOUT_FILE = "/tmp/stdout.txt"
 STDERR_FILE = "/tmp/stderr.txt"
 EXAMPLE_SKASSE_ACCOUNT_STATEMENT = """Sirupkasse
@@ -19,6 +25,10 @@ Mein GiroDirekt;DE1234567890;ABCDEF;VR BANK;01.09.2023;31.08.2023;Leasing Auto;D
 Mein GiroDirekt;DE1234996790;ABCDEFGHI;VR BANK;01.09.2023;31.08.2023;Versicherung;DE987654321;ASDFGHJKLZ;Debit;Allianz;-890,83;EUR;1.234.467,89;;Grusch;;DE13456785263000123;OFFLINE
 Mein GiroDirekt;DE1234996712;ABZDEFGHI;VR BANK;01.09.2023;31.08.2023;Food store;DE787654321;ASDFGHJKLY;Debit;Food;-5,83;EUR;1.234.267,89;;Auto;;DE51234567485876890000123;OFFLINE
 """
+
+EXAMPLE_VR_BANK_ACCOUNT_STATEMENT_WITH_SALARY = EXAMPLE_VR_BANK_ACCOUNT_STATEMENT + """
+Mein GiroDirekt;DE1234996712;ABZDEFGHI;VR BANK;01.09.2023;31.08.2023;Company xyz;DE787654321;ASDFGHJKLY;Credit;Salary;2000,11;EUR;1.234.267,89;;Auto;;DE51234567485876890000123;OFFLINE
+"""
 SORTED_SKASSEN_TRANS = """misc;31.08.2023;Debit;"Food";-5.83
 Car;31.08.2023;Debit;"Leasing";-310.90
 Insurance;31.08.2023;Debit;"Allianz";-890.83"""
@@ -26,6 +36,9 @@ Insurance;31.08.2023;Debit;"Allianz";-890.83"""
 SORTED_VRBANK_TRANS = """misc;01.09.2023;Debit;"Food";-5.83
 Car;01.09.2023;Debit;"Leasing";-310.90
 Insurance;01.09.2023;Debit;"Allianz";-890.83"""
+
+SORTED_VRBANK_TRANS_2 = SORTED_VRBANK_TRANS + """
+Incomings;01.09.2023;Credit;"Salary";2000.11"""
 
 SORTED_SKASSEN_VRBANK_TRANS = """misc;31.08.2023;Debit;"Food";-5.83
 misc;01.09.2023;Debit;"Food";-5.83

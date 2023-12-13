@@ -14,9 +14,12 @@ t_n3 = Transaction("d3", "t3", "c", -3)
 t_p10 = Transaction("d4", "t4", "d", 10)
 t_n9 = Transaction("d4", "t4", "d", -9)
 
+PATH = "/path"
+TITLE = "title"
+
 
 class PieChartStub(Plotter):
-    def plot(self, title: str, data_dict: Dict):
+    def plot(self, title: str, data_dict: Dict, path: str):
         """Stub for testing"""
         pass  # pragma: no cover
 
@@ -26,7 +29,8 @@ class ASavingsPresenter(unittest.TestCase):
         self.pie_chart = PieChartStub()
         self.pie_chart.plot = MagicMock()
         self.conf = SavingsPresConfig(plotter=self.pie_chart,
-                                      title="title",
+                                      plot_output_file=PATH,
+                                      title=TITLE,
                                       ignore_list=[])
 
         self.p = SavingsPresenter(self.conf)
@@ -39,7 +43,7 @@ class ASavingsPresenter(unittest.TestCase):
         self.p.present(t_dict)
 
         plot_dict = {'Savings': 8, 'misc': 1, 'car': 3}
-        self.pie_chart.plot.assert_called_once_with("title", plot_dict)
+        self.pie_chart.plot.assert_called_once_with(TITLE, plot_dict, PATH)
 
     def testCalcLoses(self):
         t_dict = {"misc": [t_n1, t_p2],
@@ -49,7 +53,7 @@ class ASavingsPresenter(unittest.TestCase):
         self.p.present(t_dict)
 
         plot_dict = {'Losings': 1, 'misc': 1, 'car': 12}
-        self.pie_chart.plot.assert_called_once_with("title", plot_dict)
+        self.pie_chart.plot.assert_called_once_with(TITLE, plot_dict, PATH)
 
     def testIgnoreCategories(self):
         t_dict = {"misc": [t_n1, t_p2],
@@ -60,7 +64,8 @@ class ASavingsPresenter(unittest.TestCase):
                   "salary": [t_p10]}
 
         config = SavingsPresConfig(plotter=self.pie_chart,
-                                   title="title",
+                                   plot_output_file=PATH,
+                                   title=TITLE,
                                    ignore_list=["funds", "gold"])
 
         p = SavingsPresenter(config)
@@ -68,7 +73,7 @@ class ASavingsPresenter(unittest.TestCase):
         p.present(t_dict)
 
         plot_dict = {'Savings': 8, 'misc': 1, 'car': 3}
-        self.pie_chart.plot.assert_called_once_with("title", plot_dict)
+        self.pie_chart.plot.assert_called_once_with(TITLE, plot_dict, PATH)
 
     def testCalcOnlyLosings(self):
         t_dict = {"misc": [t_n1, t_n3]}
@@ -76,7 +81,7 @@ class ASavingsPresenter(unittest.TestCase):
         self.p.present(t_dict)
 
         plot_dict = {'Losings': 4, 'misc': 4}
-        self.pie_chart.plot.assert_called_once_with("title", plot_dict)
+        self.pie_chart.plot.assert_called_once_with(TITLE, plot_dict, PATH)
 
     def testDoNothing(self):
         t_dict = {}
@@ -91,4 +96,4 @@ class ASavingsPresenter(unittest.TestCase):
         self.p.present(t_dict)
 
         plot_dict = {'Savings': 0}
-        self.pie_chart.plot.assert_called_once_with("title", plot_dict)
+        self.pie_chart.plot.assert_called_once_with(TITLE, plot_dict, PATH)

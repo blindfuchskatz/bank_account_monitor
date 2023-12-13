@@ -29,6 +29,7 @@ input_path = /sr/p
 
 [savings_presenter]
 enable = true
+output_path = /plot/path
 title = savings
 ignore_categories = fund, bank
 """
@@ -46,6 +47,7 @@ output_path = /csv_p/path
 
 [savings_presenter]
 enable = true
+output_path = /plot/path
 title = savings
 ignore_categories = fund, bank
 """
@@ -166,7 +168,10 @@ class AConfigReader(unittest.TestCase):
         self.assertDictEqual(self.config_reader.get_presenter_config(), {})
 
     def testReturnSavingsPresenterConfig(self):
-        pres = SavingsPresConfig(title="savings", ignore_list=["fund", "bank"])
+        pres = SavingsPresConfig(title="savings",
+                                 plot_output_file="/plot/path",
+                                 ignore_list=["fund", "bank"])
+
         exp_c = {PresenterId.savings: pres}
         self.parser.inject_config(CONFIG_SAVE_PRES)
 
@@ -190,7 +195,10 @@ class AConfigReader(unittest.TestCase):
 
     def testReturnCompletePresenterConfig(self):
         cp = CvePresConfig(csv_output_file="/csv_p/path")
-        sp = SavingsPresConfig(title="savings", ignore_list=["fund", "bank"])
+        sp = SavingsPresConfig(title="savings",
+                               plot_output_file="/plot/path",
+                               ignore_list=["fund", "bank"])
+
         exp_c = {PresenterId.cve: cp, PresenterId.savings: sp}
         self.parser.inject_config(COMPLETE_CONFIG)
 
@@ -200,7 +208,10 @@ class AConfigReader(unittest.TestCase):
 
     def testReturnCompleteWithDefaultValues(self):
         cve_pres = CvePresConfig(csv_output_file="")
-        save_pres = SavingsPresConfig(title="", ignore_list=[])
+        save_pres = SavingsPresConfig(title="",
+                                      plot_output_file="",
+                                      ignore_list=[])
+
         exp_c = {PresenterId.cve: cve_pres, PresenterId.savings: save_pres}
         self.parser.inject_config(COMPLETE_DEFAULT_CONFIG)
 
