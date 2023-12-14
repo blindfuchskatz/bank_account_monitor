@@ -33,7 +33,7 @@ To execute the Bank Account Monitor we need the to place the following files in 
 
 It is assumed that the bank account statement file is provided by the user. Check the release notes in the git tags which banks are supported.
 
-The following section describe how to create the sort rule and configuration file.
+The following sections describe how to create the sort rule file, the available presentation options of the categorized transactions and how to configure the Bank Account Monitor. Finally there is a brief explanation of how to execute the Bank Account Monitor.
 
 #### Creating a sort rule file
 
@@ -46,7 +46,7 @@ A sort rule is a csv line which have the following syntax:
 The Bank Account Monitor goes through each transaction and checks whether any of the search patterns match a string in the transaction description.
 If this is the case, the transaction is assigned to the appropriate category.
 
-Example:
+Sort rule file example:
 
         Car;Shell;Leasing;Gas
         Insurance;Alliance;HUK;
@@ -56,6 +56,23 @@ Any other lines that do not conform to the syntax described above are invalid an
 Transactions that cannot be assigned to a category are sorted into the *misc* category.
 If no sorting rule matches a transaction description, all transactions are assigned to the *misc* category.
 This also happens if you pass an empty file to the Bank Account Monitor as a sorting rule file.
+
+#### CVE Presenter
+
+The sorted or respectively labeled transactions can be displayed in the form of a csv file. The corresponding option is called cve presenter in the further course of the document.
+
+The output of the csv presenter have the following syntax:
+
+        <Category>;<Date>;<TransactionType>;<Description>;<Value>
+
+#### Savings Presenter
+
+There is also the possibility to present a savings calculation of the passed account statement files.
+The savings are calculated by simply subtract the debits from the incomings. The distribution of savings and debits are displayed as a pie chart.
+In case of a losing situation, the distribution of losings and the debits are displayed as pi chart.
+The corresponding option is called savings presenter in the further course of the document
+
+It is also possible to ignore specific categories by the savings calculation. This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances.
 
 #### Creating a configuration file
 
@@ -67,12 +84,12 @@ explained in the table below.
 | -------- | -------- | -------- | -------- |
 | account_statement | input_path | file or directory path where the bank account statements are stored| True
 |sort_rule| input_path | path to the sort rule file | True|
-|csv_presenter| enable |enablement of the transaction sorting into a csv file. Values are true or false. If entry is missing, the default value is false| False (Either csv_presenter or saving_presenter must be active, otherwise Bank Account Monitor abort execution)|
+|csv_presenter| enable |enablement of the cve presenter. Values are true or false. If entry is missing, the default value is false| False (at least the csv presenter or the saving presenter must be active, otherwise Bank Account Monitor abort execution)|
 |csv_presenter| output_path| output path where the csv file should be stored| True in case csv_presenter is enabled, otherwise False|
-|savings_presenter| enable | enablement of the savings calculation. Values are true ore false. If entry is missing, the default value is false| False (Either csv_presenter or saving_presenter must be active, otherwise Bank Account Monitor abort execution)|
-|savings_presenter| output_path | output path where the savings calculation as PNG image is stored. The image contains a distribution of the incomings and debits of the account statement as pie chart|True in case savings_presenter is enabled, otherwise False|
+|savings_presenter| enable | enablement of the savings presenter. Values are true ore false. If entry is missing, the default value is false| False (at least the csv presenter or the saving presenter must be active, otherwise Bank Account Monitor abort execution)|
+|savings_presenter| output_path | output path where the savings calculation as PNG image is stored|True in case savings presenter is enabled, otherwise False|
 |savings_presenter|title|title of the pie chart. Is printed in the image|False|
-|savings_presenter|ignore_categories| comma separated list of categories which should be ignored during the savings calculation. This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances|False|
+|savings_presenter|ignore_categories| comma separated list of categories which should be ignored during the savings calculation|False|
 
 
 
@@ -94,16 +111,14 @@ The configuration file have the following syntax:
         title = <string>
         ignore_categories = <cat1, cat2, cat3>
 
-The output of the csv_presenter have the following syntax:
-
-        <Category>;<Date>;<TransactionType>;<Description>;<Value>
+#### Run the Bank Account Monitor
 
 If the account statement file, the sorting rule file and the configuration file are available, the Bank Account Monitor can be started in the SDK as follows:
 
         python3 ./bank_account_monitor_main.py -c ./analyze/config.txt
 
 
-In the [examples](./examples/) directory there is a example for a sort_rule file,
+In the [examples](./examples/) directory there is a example for a sort rule file,
 vrbank account statement, configuration file and the corresponding sorted output as well as the savings pie chart, which are generated with the following command:
 
         python3 ./bank_account_monitor_main.py -c ./examples/config.txt
