@@ -1,15 +1,15 @@
 # *Bank Account Monitor*
 
 We faced the problem that some banks do not provide appropriate or satisfactory tools to monitor or categorize transactions.
-The Bank Account Monitor is a tool that reads bank statements and categorizes the transactions using a customized sorting rule.
+The Bank Account Monitor is a tool that reads bank account statements and categorizes the transactions using a customized sorting rule.
 The maturity level or release notes are visible via the release Git tags.
 
 ## *Example Usage*
 
 The easiest, but not resource-saving way to use the Bank Account Monitor is via the *bank_account_monitor_sdk*.
-All dependencies are included in the *bank_account_monitor_sdk*. See also into the [Dockerfile](./docker/Dockerfile).
+All dependencies are included in the *bank_account_monitor_sdk*. See also [Dockerfile](./docker/Dockerfile).
 If you don't want the overhead caused by the SDK, feel free to create your own Python environment.
-All commands below have been tested only in an Ubuntu 22.04 environment.
+All commands below have been tested only in an Ubuntu 22.04 environment with Docker installed.
 
 ### *Building bank_account_monitor_sdk*
 
@@ -19,19 +19,19 @@ Enter the project root directory and execute the following command. This will bu
 
 ### *Start bank_account_monitor_sdk*
 
-Enter the project root directory and execute the following command. This will start the SDK and mount the project root directory into the SDK.
+Enter the project root directory and execute the following command. This will start the SDK and mount the project root directory in the SDK.
 
         ./run_sdk.sh
 
 ### *Execute Bank Account Monitor*
 
-To execute the Bank Account Monitor we need the to place the following files in the [analyze](./analyze/) directory.
+To execute the Bank Account Monitor we need to place the following files in the [analyze](./analyze/) directory.
 
 1. bank account statement file
 2. sort rule file
 3. configuration file
 
-It is assumed that the bank account statement file is provided by the user. Check the release notes in the git tags which banks are supported.
+It is assumed that the bank account statement file is provided by the user. Check the release notes in the Git tags which banks are supported.
 
 The following sections describe how to create the sort rule file, the available presentation options of the categorized transactions and how to configure the Bank Account Monitor. Finally there is a brief explanation of how to execute the Bank Account Monitor.
 
@@ -59,7 +59,7 @@ This also happens if you pass an empty file to the Bank Account Monitor as a sor
 
 #### CVE Presenter
 
-The sorted or respectively labeled transactions can be displayed in the form of a csv file. The corresponding option is called cve presenter in the further course of the document.
+The categorized transactions can be displayed in the form of a csv file. The corresponding option is called cve presenter in the further course of the document.
 
 The output of the csv presenter have the following syntax:
 
@@ -69,10 +69,10 @@ The output of the csv presenter have the following syntax:
 
 There is also the possibility to present a savings calculation of the passed account statement files.
 The savings are calculated by simply subtract the debits from the incomings. The distribution of savings and debits are displayed as a pie chart.
-In case of a losing situation, the distribution of losings and the debits are displayed as pi chart.
-The corresponding option is called savings presenter in the further course of the document
+In case of a losing situation, the distribution of losings and the debits are displayed as a pie chart.
+The corresponding option is called savings presenter in the further course of the document.
 
-It is also possible to ignore specific categories by the savings calculation. This is useful when you have for instance a fund savings plan where this kinds of debits should be ignored, because in that case those debits are only a balancing of your finances.
+It is also possible to ignore certain categories when calculating savings. This is useful if, for example, you have a fund savings plan where such debits should be ignored, as in this case it is just a reallocation of your finances.
 
 #### Creating a configuration file
 
@@ -82,7 +82,7 @@ explained in the table below.
 
 | Section| Option | Description| Mandatory|
 | -------- | -------- | -------- | -------- |
-| account_statement | input_path | file or directory path where the bank account statements are stored| True
+| account_statement | input_path | file or directory path, where the bank account statements are stored | True
 |sort_rule| input_path | path to the sort rule file | True|
 |csv_presenter| enable |enablement of the cve presenter. Values are true or false. If entry is missing, the default value is false| False (at least the csv presenter or the saving presenter must be active, otherwise Bank Account Monitor abort execution)|
 |csv_presenter| output_path| output path where the csv file should be stored| True in case csv_presenter is enabled, otherwise False|
