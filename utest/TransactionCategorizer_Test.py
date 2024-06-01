@@ -8,7 +8,7 @@ from src.Sort.SortRule import SortRule
 from src.Sort.SortRuleProvider import SortRuleProvider
 from src.Sort.SortRuleProviderException import SortRuleProviderException
 from src.TransactionProvider.Transaction import Transaction
-from src.TransactionMonitor import TransactionMonitor
+from src.TransactionCategorizer import TransactionCategorizer
 from src.Presenter.TransactionPresenter import TransactionPresenter
 from src.TransactionProvider.TransactionProvider import TransactionProvider
 from src.TransactionProvider.TransactionProviderException import TransactionProviderException
@@ -44,14 +44,14 @@ class TransactionPresenterStub(TransactionPresenter):
         return  # pragma: no cover
 
 
-class ATransactionMonitor(unittest.TestCase):
+class ATransactionCategorizer(unittest.TestCase):
     def setUp(self) -> None:
         self.t_provider = TransactionProviderStub()
         self.sr_provider = SortRuleProviderStub()
         self.t_presenter = TransactionPresenterStub()
         self.logger = Logger()
         self.sorter = TransactionSorter()
-        self.tm = TransactionMonitor(
+        self.tc = TransactionCategorizer(
             self.t_provider, self.sr_provider, self.sorter, self.t_presenter, self.logger)
 
     def testPresentSortedTransactions(self):
@@ -64,7 +64,7 @@ class ATransactionMonitor(unittest.TestCase):
 
         self.t_presenter.present = MagicMock()
 
-        self.tm.monitor()
+        self.tc.run()
 
         self.t_provider.get_transactions.assert_called_once()
         self.sr_provider.get_sort_rules.assert_called_once()
@@ -76,7 +76,7 @@ class ATransactionMonitor(unittest.TestCase):
             side_effect=TransactionProviderException(error_msg))
         self.logger.error = MagicMock()
 
-        self.tm.monitor()
+        self.tc.run()
 
         self.logger.error.assert_called_once_with(error_msg)
 
@@ -89,7 +89,7 @@ class ATransactionMonitor(unittest.TestCase):
 
         self.logger.error = MagicMock()
 
-        self.tm.monitor()
+        self.tc.run()
 
         self.logger.error.assert_called_once_with(error_msg)
 
@@ -102,7 +102,7 @@ class ATransactionMonitor(unittest.TestCase):
 
         self.logger.error = MagicMock()
 
-        self.tm.monitor()
+        self.tc.run()
 
         self.logger.error.assert_called_once_with(error_msg)
 
@@ -116,6 +116,6 @@ class ATransactionMonitor(unittest.TestCase):
 
         self.logger.error = MagicMock()
 
-        self.tm.monitor()
+        self.tc.run()
 
         self.logger.error.assert_called_once_with(error_msg)

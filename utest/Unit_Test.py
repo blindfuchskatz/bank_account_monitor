@@ -9,7 +9,7 @@ from utest.Sort.TransactionSorter_Test import ATransactionSorter
 from utest.TransactionProvider.SKassen.SKassenTransactionProvider_Test import ASKassenTransactionProvider
 from utest.Sort.CsvSortRuleProvider_Test import ACsvSortRuleProvider
 from utest.File.FileReader_Test import AFileReader
-from utest.TransactionMonitor_Test import ATransactionMonitor
+from utest.TransactionCategorizer_Test import ATransactionCategorizer
 from utest.Presenter.CsvPresenter_Test import ACsvPresenter
 from utest.Presenter.SavingsPresenter_Test import ASavingsPresenter
 from utest.Presenter.MultiPresenter_Test import AMultiPresenter

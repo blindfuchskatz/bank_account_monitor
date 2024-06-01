@@ -6,7 +6,7 @@ from src.Configuration.ConfigReader import ConfigReader
 from src.Logger import Logger
 from src.Presenter.PresenterFactory import PresenterFactory
 from src.Sort.CsvSortRuleProvider import CsvSortRuleProvider
-from src.TransactionMonitor import TransactionMonitor
+from src.TransactionCategorizer import TransactionCategorizer
 from src.Sort.TransactionSorter import TransactionSorter
 from src.TransactionProvider.TransactionProviderFactory import TransactionProviderFactory
 from version import __version__
@@ -41,9 +41,9 @@ if __name__ == '__main__':
 
         sorter = TransactionSorter()
 
-        monitor = TransactionMonitor(
+        tc = TransactionCategorizer(
             trans_provider, sort_rule_provider, sorter, presenter, logger)
 
-        monitor.monitor()
+        tc.run()
     except Exception as e:
         logger.error(str(e))
