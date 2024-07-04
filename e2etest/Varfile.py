@@ -73,3 +73,5 @@ EXCEPTION_INVALID_OUTPUT = """Presenter selection error|what:<Cve presenter erro
 """
 EXCEPTION_INVALID_OUTPUT2 = """Cve presenter error|invalid input path|path:</tmp/somefile.txt>
 """
+EXCEPTION_INVALID_CONFIG_PATH = """Config file error|what:</tmp/config_does_not_exist.txt> does not exist
+"""

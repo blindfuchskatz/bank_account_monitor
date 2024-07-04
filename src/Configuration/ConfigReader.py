@@ -3,7 +3,7 @@ from src.Configuration.ConfigReaderException import ConfigReaderException
 from src.Configuration.PresenterConfig import CvePresConfig, PresConf, PresenterId, SavingsPresConfig
 from src.Configuration.ConfigParserInterface import ConfigParserInterface
 
-CONFIG_READER_ERROR = "Config file syntax error|what:{}"
+CONFIG_READER_ERROR = "Config file error|what:{}"
 
 
 class ConfigReader:

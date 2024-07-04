@@ -84,6 +84,10 @@ Exception for passing only directory of output file is logged
     When Bank account monitor is called with invalid cvs presenter output path
     Then Error is logged to standard err    ${EXCEPTION_INVALID_OUTPUT}
 
+Exception for invalid config file path is logged
+    When Bank account monitor is called with invalid config path
+    Then Error is logged to standard err    ${EXCEPTION_INVALID_CONFIG_PATH}
+
 
 *** Keywords ***
 A skasse bank statement with three transactions
@@ -200,6 +204,14 @@ Bank account monitor is called with invalid cvs presenter output path
     ...    /tmp/
     ...    ${False}
     ...    /some/path
+
+Bank account monitor is called with invalid config path
+    Run Process
+    ...    python3
+    ...    /bank_account_monitor/bank_account_monitor_main.py
+    ...    -c
+    ...    /tmp/config_does_not_exist.txt
+    ...    stderr=${STDERR_FILE}
 
 Bank account monitor help is called
     Run Process

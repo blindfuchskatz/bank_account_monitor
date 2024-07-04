@@ -1,10 +1,20 @@
 
 import configparser
+from src.File.FileChecker import FileChecker
 from src.Configuration.ConfigParserInterface import ConfigParserInterface
+
+CONFIG_FILE_DOES_NOT_EXIST = "<{}> does not exist"
+
+
+class ConfigParserException(Exception):
+    """Raised on sort rule provider error"""
 
 
 class ConfigParserWrapper(ConfigParserInterface):
     def read(self, config_path: str) -> None:
+        if FileChecker.file_exists(config_path) == False:
+            raise ConfigParserException(
+                CONFIG_FILE_DOES_NOT_EXIST.format(config_path))
         self.configparser = configparser.ConfigParser(interpolation=None)
         self.configparser.read(config_path)
 
